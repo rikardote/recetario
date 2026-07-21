@@ -2,9 +2,6 @@
 
 use Livewire\Component;
 use Livewire\WithPagination;
-use App\Models\Recipe;
-use App\Models\Category;
-use App\Models\Tag;
 
 new class extends Component
 {
@@ -13,7 +10,6 @@ new class extends Component
     public $search = '';
     public $category = '';
     public $difficulty = '';
-    public $tag = '';
 
     public function updatingSearch()
     {
@@ -25,21 +21,6 @@ new class extends Component
         $this->category = $this->category === $slug ? '' : $slug;
         $this->resetPage();
     }
-
-    public function recipes()
-    {
-        return Recipe::with('category', 'tags')
-            ->where('is_published', true)
-            ->when($this->search, fn($q) => $q->where(function($q) {
-                $q->where('name', 'like', "%{$this->search}%")
-                  ->orWhere('description', 'like', "%{$this->search}%");
-            }))
-            ->when($this->category, fn($q) => $q->whereHas('category', fn($c) => $c->where('slug', $this->category)))
-            ->when($this->difficulty, fn($q) => $q->where('difficulty', $this->difficulty))
-            ->when($this->tag, fn($q) => $q->whereHas('tags', fn($t) => $t->where('slug', $this->tag)))
-            ->latest()
-            ->paginate(12);
-    }
 };
 ?>
 
@@ -47,7 +28,7 @@ new class extends Component
     <h1 class="text-3xl font-bold text-gray-900 mb-8">Recetas</h1>
 
     <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Sidebar -->
+        {{-- Sidebar --}}
         <aside class="lg:w-64 flex-shrink-0">
             <div class="space-y-6">
                 <div>
@@ -58,8 +39,8 @@ new class extends Component
                     <h3 class="text-sm font-semibold text-gray-900 mb-2">Dificultad</h3>
                     <div class="space-y-1">
                         @foreach(range(1,5) as $d)
-                            <button wire:click="$set('difficulty', {{ $difficulty == $d ? '' : $d }})"
-                                class="block w-full text-left px-3 py-1.5 text-sm rounded-lg {{ $difficulty == $d ? 'bg-orange-100 text-orange-800' : 'text-gray-600 hover:bg-gray-50' }}">
+                            <button wire:click="$set('difficulty', '{{ $difficulty == $d ? '' : $d }}')"
+                                class="block w-full text-left px-3 py-1.5 text-sm rounded-lg transition-colors {{ $difficulty == (string)$d ? 'bg-orange-100 text-orange-800' : 'text-gray-600 hover:bg-gray-50' }}">
                                 {{ str_repeat('⭐', $d) }}
                             </button>
                         @endforeach
@@ -67,23 +48,33 @@ new class extends Component
                 </div>
                 <div>
                     <h3 class="text-sm font-semibold text-gray-900 mb-2">Categorías</h3>
-                    <div class="space-y-1">
-                        @php $cats = Category::withCount('publishedRecipes')->get(); @endphp
-                        @foreach($cats as $cat)
-                            <button wire:click="filterCategory('{{ $cat->slug }}')"
-                                class="flex justify-between w-full text-left px-3 py-1.5 text-sm rounded-lg {{ $category === $cat->slug ? 'bg-orange-100 text-orange-800' : 'text-gray-600 hover:bg-gray-50' }}">
-                                <span>{{ $cat->icon }} {{ $cat->name }}</span>
-                                <span class="text-gray-400 text-xs">{{ $cat->published_recipes_count }}</span>
-                            </button>
-                        @endforeach
-                    </div>
+                    @php $cats = \App\Models\Category::withCount('publishedRecipes')->get(); @endphp
+                    @foreach($cats as $cat)
+                        <button wire:click="filterCategory('{{ $cat->slug }}')"
+                            class="flex justify-between w-full text-left px-3 py-1.5 text-sm rounded-lg transition-colors {{ $category === $cat->slug ? 'bg-orange-100 text-orange-800' : 'text-gray-600 hover:bg-gray-50' }}">
+                            <span>{{ $cat->icon }} {{ $cat->name }}</span>
+                            <span class="text-gray-400 text-xs">{{ $cat->published_recipes_count }}</span>
+                        </button>
+                    @endforeach
                 </div>
             </div>
         </aside>
 
-        <!-- Grid -->
+        {{-- Grid --}}
         <div class="flex-1">
-            @php $recipes = $this->recipes(); @endphp
+            @php
+                $recipes = \App\Models\Recipe::with('category', 'tags')
+                    ->where('is_published', true)
+                    ->when($category, fn($q) => $q->whereRelation('category', 'slug', $category))
+                    ->when($search, fn($q) => $q->where(function($q) {
+                        $q->where('name', 'like', "%{$search}%")
+                          ->orWhere('description', 'like', "%{$search}%");
+                    }))
+                    ->when($difficulty, fn($q) => $q->where('difficulty', (int)$difficulty))
+                    ->latest()
+                    ->paginate(12);
+            @endphp
+
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
                 @forelse($recipes as $recipe)
                     <a href="/recetas/{{ $recipe->slug }}"
@@ -105,9 +96,11 @@ new class extends Component
                 @empty
                     <div class="col-span-full text-center py-16 text-gray-400">
                         <p class="text-lg">No se encontraron recetas</p>
+                        <button wire:click="$set('category', '')" class="mt-2 text-sm text-orange-600 hover:underline">Limpiar filtros</button>
                     </div>
                 @endforelse
             </div>
+
             <div class="mt-8">
                 {{ $recipes->links() }}
             </div>
