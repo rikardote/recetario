@@ -3,19 +3,22 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 
 class Category extends Model
 {
     protected $fillable = ['name', 'slug', 'description', 'icon'];
 
-    public function recipes(): HasMany
+    public function recipes(): BelongsToMany
     {
-        return $this->hasMany(Recipe::class);
+        return $this->belongsToMany(Recipe::class, 'category_recipe')
+            ->withPivot('is_primary');
     }
 
-    public function publishedRecipes(): HasMany
+    public function publishedRecipes(): BelongsToMany
     {
-        return $this->hasMany(Recipe::class)->where('is_published', true);
+        return $this->belongsToMany(Recipe::class, 'category_recipe')
+            ->withPivot('is_primary')
+            ->where('is_published', true);
     }
 }
