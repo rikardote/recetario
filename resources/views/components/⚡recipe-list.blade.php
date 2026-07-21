@@ -63,16 +63,28 @@ new class extends Component
         {{-- Grid --}}
         <div class="flex-1">
             @php
-                $recipes = \App\Models\Recipe::with('category', 'tags')
-                    ->where('is_published', true)
-                    ->when($category, fn($q) => $q->whereRelation('category', 'slug', $category))
-                    ->when($search, fn($q) => $q->where(function($q) {
-                        $q->where('name', 'like', "%{$search}%")
-                          ->orWhere('description', 'like', "%{$search}%");
-                    }))
-                    ->when($difficulty, fn($q) => $q->where('difficulty', (int)$difficulty))
-                    ->latest()
-                    ->paginate(12);
+                $catSlug = $this->category;
+                $searchText = $this->search;
+                $diff = $this->difficulty;
+
+                $query = \App\Models\Recipe::with('category', 'tags')->where('is_published', true);
+
+                if ($catSlug) {
+                    $query->whereRelation('category', 'slug', $catSlug);
+                }
+
+                if ($searchText) {
+                    $query->where(function($q) use ($searchText) {
+                        $q->where('name', 'like', "%{$searchText}%")
+                          ->orWhere('description', 'like', "%{$searchText}%");
+                    });
+                }
+
+                if ($diff !== '') {
+                    $query->where('difficulty', (int) $diff);
+                }
+
+                $recipes = $query->latest()->paginate(12);
             @endphp
 
             <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-6">
