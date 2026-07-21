@@ -36,7 +36,7 @@ class RecipeList extends Component
         $recipes = Recipe::with('category', 'tags')
             ->where('is_published', true)
             ->when($this->category, function ($q) {
-                $q->whereRelation('category', 'slug', $this->category);
+                $q->whereHas('categories', fn ($c) => $c->where('category_recipe.category_id', Category::where('slug', $this->category)->value('id')));
             })
             ->when($this->search, function ($q) {
                 $q->where(function ($sub) {

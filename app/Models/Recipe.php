@@ -2,15 +2,15 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Recipe extends Model
 {
     protected $fillable = [
-        'category_id', 'name', 'slug', 'description', 'objective',
+        'name', 'slug', 'description', 'objective',
         'prep_time', 'cook_time', 'total_time', 'servings', 'difficulty', 'cost',
         'result_texture', 'result_color', 'result_consistency',
         'result_temperature', 'result_flavor',
@@ -31,9 +31,34 @@ class Recipe extends Model
         ];
     }
 
-    public function category(): BelongsTo
+    public function categories(): BelongsToMany
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsToMany(Category::class, 'category_recipe')
+            ->withPivot('is_primary')
+            ->orderByPivot('is_primary', 'desc');
+    }
+
+    /**
+     * Primary category (backward compat).
+     */
+    public function category(): Attribute
+    {
+        return Attribute::make(
+            get: fn () => $this->categories->first(fn ($c) => $c->pivot->is_primary)
+                ?? $this->categories->first()
+        );
+    }
+
+    /**
+     * Sync categories for a recipe (used by parser).
+     */
+    public function syncCategories(array $categoryIds, int $primaryId): void
+    {
+        $data = [];
+        foreach ($categoryIds as $id) {
+            $data[$id] = ['is_primary' => $id === $primaryId];
+        }
+        $this->categories()->sync($data);
     }
 
     public function steps(): HasMany

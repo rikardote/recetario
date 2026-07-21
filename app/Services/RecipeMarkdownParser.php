@@ -70,16 +70,26 @@ class RecipeMarkdownParser
         $this->parse();
         $data = $this->result;
 
-        $catName = $data['category'] ?? 'Sin categoría';
-        $category = Category::firstOrCreate(
-            ['slug' => Str::slug($catName)],
-            ['name' => $catName, 'icon' => $this->categoryIcon($catName)]
-        );
+        $catName = $data['category'] ?? ($data['categories'][0] ?? 'Sin categoría');
+        $catNames = $data['categories'] ?? [$catName];
+
+        // Resolve/create all categories, track primary
+        $catIds = [];
+        $primaryId = null;
+        foreach ($catNames as $i => $name) {
+            $name = trim($name);
+            $cat = Category::firstOrCreate(
+                ['slug' => Str::slug($name)],
+                ['name' => $name, 'icon' => $this->categoryIcon($name)]
+            );
+            $catIds[] = $cat->id;
+            if ($i === 0) $primaryId = $cat->id;
+        }
 
         $slug = $data['slug'] ?? Str::slug($data['name'] ?? 'sin-nombre');
 
         $recipe = Recipe::create([
-            'category_id' => $category->id,
+            'name' => $data['name'] ?? 'Sin nombre',
             'name' => $data['name'] ?? 'Sin nombre',
             'slug' => $slug,
             'description' => $data['description'] ?? ($data['objective'] ?? ''),
@@ -104,6 +114,9 @@ class RecipeMarkdownParser
             'chef_notes' => $data['chef_notes'] ?? null,
             'is_published' => true,
         ]);
+
+        // Sync categories (primary = first in list)
+        $recipe->syncCategories($catIds, $primaryId);
 
         // Tags
         if (!empty($data['tags'])) {
@@ -308,11 +321,25 @@ class RecipeMarkdownParser
         }
 
         $inTags = false;
+        $inCategories = false;
         $inInstantPot = false;
 
         foreach ($lines as $line) {
             $line = trim($line);
             if (empty($line) || $line[0] === '#') continue;
+
+            // Categories list (multi)
+            if (str_starts_with($line, 'categories:')) {
+                $inCategories = true;
+                continue;
+            }
+            if ($inCategories && str_starts_with($line, '- ')) {
+                $this->result['categories'][] = ucfirst(trim(substr($line, 2)));
+                continue;
+            }
+            if ($inCategories && !str_starts_with($line, '- ')) {
+                $inCategories = false;
+            }
 
             // Tags list
             if (str_starts_with($line, 'tags:')) {
@@ -347,7 +374,7 @@ class RecipeMarkdownParser
 
                 match ($key) {
                     'slug' => $this->result['slug'] = $val,
-                    'category' => $this->result['category'] = ucfirst($val),
+                    'category' => $this->result['categories'] = array_values(array_unique([ucfirst($val)])),
                     'difficulty' => $this->result['difficulty'] = (int) $val,
                     'servings' => $this->result['servings'] = (int) $val,
                     'prep_time' => $this->result['prep_time'] = $this->parseMinutes($val),
@@ -359,6 +386,9 @@ class RecipeMarkdownParser
                 };
             }
         }
+
+        // Smart inference: detect additional categories from recipe name
+        $this->inferCategories();
     }
 
     // ═══════════════════════════════════════════════════════════
@@ -782,6 +812,47 @@ class RecipeMarkdownParser
         if (str_contains($s, 'natural')) return 'natural';
         if (str_contains($s, 'rápida') || str_contains($s, 'rapida')) return 'rapida';
         return 'natural';
+    }
+
+    /**
+     * Infer additional categories from recipe name.
+     * E.g., "Caldo de Res" → add "Res" category if not already present.
+     */
+    private function inferCategories(): void
+    {
+        $name = $this->result['name'] ?? '';
+        if (empty($name)) return;
+
+        $cats = $this->result['categories'] ?? [];
+        $nameLower = strtolower($name);
+
+        $keywordMap = [
+            'pollo' => 'Pollo', 'pechuga' => 'Pollo', 'muslo' => 'Pollo',
+            'res' => 'Res', 'bistec' => 'Res', 'carne de res' => 'Res',
+            'cerdo' => 'Cerdo', 'puerco' => 'Cerdo', 'cochinita' => 'Cerdo', 'carnitas' => 'Cerdo',
+            'pescado' => 'Pescados', 'salmón' => 'Pescados',
+            'camarón' => 'Mariscos', 'camarones' => 'Mariscos', 'calamar' => 'Mariscos',
+            'pasta' => 'Pasta', 'spaghetti' => 'Pasta',
+            'arroz' => 'Arroz',
+            'frijol' => 'Frijoles', 'frijoles' => 'Frijoles',
+            'sopa' => 'Sopas', 'caldo' => 'Sopas', 'crema de' => 'Sopas',
+            'huevo' => 'Desayunos', 'desayuno' => 'Desayunos',
+            'pan' => 'Pan', 'cheesecake' => 'Postres', 'pastel' => 'Postres',
+            'verdura' => 'Verduras',
+        ];
+
+        $catsLower = array_map('strtolower', $cats);
+
+        foreach ($keywordMap as $keyword => $category) {
+            if (stripos($nameLower, $keyword) !== false) {
+                if (!in_array(strtolower($category), $catsLower)) {
+                    $cats[] = $category;
+                    $catsLower[] = strtolower($category);
+                }
+            }
+        }
+
+        $this->result['categories'] = array_values($cats);
     }
 
     private function handleRelease(string $val): void

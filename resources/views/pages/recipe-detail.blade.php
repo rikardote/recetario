@@ -37,6 +37,13 @@ new class extends Component
             <span class="text-xs font-medium text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
                 {{ $recipe->category->icon }} {{ $recipe->category->name }}
             </span>
+            @foreach($recipe->categories as $cat)
+                @if($cat->id !== ($recipe->category?->id))
+                    <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">
+                        {{ $cat->icon }} {{ $cat->name }}
+                    </span>
+                @endif
+            @endforeach
             <span class="text-sm text-gray-400">{{ str_repeat('⭐', $recipe->difficulty) }}</span>
             <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">{{ $recipe->cost }}</span>
         </div>

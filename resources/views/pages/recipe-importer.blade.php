@@ -250,7 +250,7 @@ El queso nunca debe cocinarse bajo presión.
                         <div class="grid grid-cols-3 gap-3">
                             <div class="bg-gray-50 rounded-lg p-2 text-center">
                                 <span class="text-xs text-gray-400">Categoría</span>
-                                <p class="font-medium text-gray-700 text-sm">{{ $parsed['category'] ?? '—' }}</p>
+                                <p class="font-medium text-gray-700 text-sm">{{ implode(', ', $parsed['categories'] ?? [$parsed['category'] ?? '—']) }}</p>
                             </div>
                             <div class="bg-gray-50 rounded-lg p-2 text-center">
                                 <span class="text-xs text-gray-400">Dificultad</span>
