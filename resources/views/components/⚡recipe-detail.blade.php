@@ -13,7 +13,7 @@ new class extends Component
     public function mount(Recipe $recipe)
     {
         $this->recipe = $recipe->load([
-            'category', 'steps', 'equipment', 'tags',
+            'categories', 'steps', 'equipment', 'tags',
             'variants', 'adaptations', 'concepts', 'errors',
             'recipeIngredients.ingredient', 'images', 'videos',
         ]);

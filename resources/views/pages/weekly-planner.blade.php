@@ -24,7 +24,7 @@ new class extends Component
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
         <div>
             <h2 class="font-semibold text-gray-900 mb-4">Mi menú ({{ count($selected) }})</h2>
-            @php $selectedRecipes = Recipe::whereIn('id', $this->selected)->with('category')->get(); @endphp
+            @php $selectedRecipes = Recipe::whereIn('id', $this->selected)->with('categories')->get(); @endphp
             @forelse($selectedRecipes as $recipe)
                 <div class="flex items-center justify-between bg-white border border-gray-100 rounded-xl p-4 mb-2">
                     <div><span class="text-xs text-orange-600 bg-orange-50 px-2 py-1 rounded-full">{{ $recipe->category->name }}</span><span class="ml-2 font-medium">{{ $recipe->name }}</span></div>

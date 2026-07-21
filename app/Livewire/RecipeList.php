@@ -33,7 +33,7 @@ class RecipeList extends Component
 
     public function render()
     {
-        $recipes = Recipe::with('category', 'tags')
+        $recipes = Recipe::with('categories', 'tags')
             ->where('is_published', true)
             ->when($this->category, function ($q) {
                 $q->whereHas('categories', fn ($c) => $c->where('category_recipe.category_id', Category::where('slug', $this->category)->value('id')));

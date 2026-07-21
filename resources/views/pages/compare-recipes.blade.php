@@ -10,12 +10,12 @@ new class extends Component
 
     public function getRecipe1Property()
     {
-        return $this->recipe1_id ? Recipe::with('steps', 'category', 'tags')->find($this->recipe1_id) : null;
+        return $this->recipe1_id ? Recipe::with('steps', 'categories', 'tags')->find($this->recipe1_id) : null;
     }
 
     public function getRecipe2Property()
     {
-        return $this->recipe2_id ? Recipe::with('steps', 'category', 'tags')->find($this->recipe2_id) : null;
+        return $this->recipe2_id ? Recipe::with('steps', 'categories', 'tags')->find($this->recipe2_id) : null;
     }
 };
 ?>

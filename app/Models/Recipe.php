@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -31,6 +30,8 @@ class Recipe extends Model
         ];
     }
 
+    protected $appends = ['category'];
+
     public function categories(): BelongsToMany
     {
         return $this->belongsToMany(Category::class, 'category_recipe')
@@ -38,15 +39,11 @@ class Recipe extends Model
             ->orderByPivot('is_primary', 'desc');
     }
 
-    /**
-     * Primary category (backward compat).
-     */
-    public function category(): Attribute
+    public function getCategoryAttribute(): ?Category
     {
-        return Attribute::make(
-            get: fn () => $this->categories->first(fn ($c) => $c->pivot->is_primary)
-                ?? $this->categories->first()
-        );
+        // Prefer the primary category, fallback to first
+        return $this->categories->first(fn($c) => $c->pivot->is_primary)
+            ?? $this->categories->first();
     }
 
     /**

@@ -67,10 +67,10 @@ new class extends Component
                 $searchText = $this->search;
                 $diff = $this->difficulty;
 
-                $query = \App\Models\Recipe::with('category', 'tags')->where('is_published', true);
+                $query = \App\Models\Recipe::with('categories', 'tags')->where('is_published', true);
 
                 if ($catSlug) {
-                    $query->whereRelation('category', 'slug', $catSlug);
+                    $query->whereHas('categories', 'slug', $catSlug);
                 }
 
                 if ($searchText) {

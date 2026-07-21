@@ -14,12 +14,12 @@ new class extends Component
 
     public function updatedRecipe1Id()
     {
-        $this->recipe1 = Recipe::with('steps', 'category', 'tags')->find($this->recipe1_id);
+        $this->recipe1 = Recipe::with('steps', 'categories', 'tags')->find($this->recipe1_id);
     }
 
     public function updatedRecipe2Id()
     {
-        $this->recipe2 = Recipe::with('steps', 'category', 'tags')->find($this->recipe2_id);
+        $this->recipe2 = Recipe::with('steps', 'categories', 'tags')->find($this->recipe2_id);
     }
 
     public function render()

@@ -69,7 +69,7 @@ new class extends Component
             <a href="/recetas" class="text-sm font-medium text-orange-600 hover:text-orange-700">Ver todas →</a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @php $recent = Recipe::with('category')->where('is_published', true)->latest()->take(6)->get(); @endphp
+            @php $recent = Recipe::with('categories')->where('is_published', true)->latest()->take(6)->get(); @endphp
             @foreach($recent as $recipe)
                 <a href="/recetas/{{ $recipe->slug }}"
                    class="group block bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-200 hover:shadow-lg hover:shadow-orange-50 transition-all">

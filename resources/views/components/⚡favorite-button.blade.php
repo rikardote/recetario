@@ -12,7 +12,7 @@ new class extends Component
     {
         $favorites = Recipe::where('is_published', true)
             ->whereHas('favorites')
-            ->with('category')
+            ->with('categories')
             ->get();
 
         return view('components.⚡favorite-button', [

@@ -23,7 +23,7 @@ new class extends Component
 
     public function render()
     {
-        $selectedRecipes = Recipe::whereIn('id', $this->selected)->with('category')->get();
+        $selectedRecipes = Recipe::whereIn('id', $this->selected)->with('categories')->get();
         $available = Recipe::where('is_published', true)
             ->whereNotIn('id', $this->selected)
             ->orderBy('name')

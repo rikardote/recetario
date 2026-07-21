@@ -24,13 +24,13 @@ new class extends Component
     public function search()
     {
         if (strlen($this->q) >= 2) {
-            $this->results = Recipe::with('category')
+            $this->results = Recipe::with('categories')
                 ->where('is_published', true)
                 ->where(function($q) {
                     $q->where('name', 'like', "%{$this->q}%")
                       ->orWhere('description', 'like', "%{$this->q}%")
                       ->orWhere('objective', 'like', "%{$this->q}%")
-                      ->orWhereHas('category', fn($c) => $c->where('name', 'like', "%{$this->q}%"))
+                      ->orWhereHas('categories', fn($c) => $c->where('name', 'like', "%{$this->q}%"))
                       ->orWhereHas('tags', fn($t) => $t->where('name', 'like', "%{$this->q}%"));
                 })
                 ->latest()
