@@ -2,6 +2,7 @@
 
 namespace App\Livewire;
 
+use App\Models\Category;
 use App\Models\Recipe;
 use Livewire\Component;
 use Livewire\WithPagination;
