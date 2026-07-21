@@ -109,6 +109,7 @@ language: es-MX
 # 🍗 Choripollo
 
 slug: choripollo
+recipe_type: base
 category: pollo
 difficulty: 2
 servings: 4
@@ -249,8 +250,14 @@ El queso nunca debe cocinarse bajo presión.
                         {{-- Info --}}
                         <div class="grid grid-cols-3 gap-3">
                             <div class="bg-gray-50 rounded-lg p-2 text-center">
-                                <span class="text-xs text-gray-400">Categoría</span>
+                                <span class="text-xs text-gray-400">Categorías</span>
                                 <p class="font-medium text-gray-700 text-sm">{{ implode(', ', $parsed['categories'] ?? [$parsed['category'] ?? '—']) }}</p>
+                            </div>
+                            <div class="bg-gray-50 rounded-lg p-2 text-center">
+                                <span class="text-xs text-gray-400">Tipo</span>
+                                <p class="font-medium text-sm {{ ($parsed['recipe_type'] ?? 'base') === 'derived' ? 'text-blue-700' : 'text-green-700' }}">
+                                    {{ ($parsed['recipe_type'] ?? 'base') === 'derived' ? '🍽️ Derivada' : '🧱 Base' }}
+                                </p>
                             </div>
                             <div class="bg-gray-50 rounded-lg p-2 text-center">
                                 <span class="text-xs text-gray-400">Dificultad</span>

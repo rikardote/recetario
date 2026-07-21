@@ -40,9 +40,14 @@
                     <a href="/recetas/{{ $recipe->slug }}"
                        class="group block bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-200 hover:shadow-lg transition-all">
                         <div class="flex items-start justify-between mb-3">
-                            <span class="text-xs font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
-                                {{ $recipe->category->icon }} {{ $recipe->category->name }}
-                            </span>
+                            <div class="flex items-center gap-1.5 flex-wrap">
+                                <span class="text-xs font-medium {{ $recipe->isDerived() ? 'bg-blue-50 text-blue-700' : 'bg-green-50 text-green-700' }} px-2 py-0.5 rounded-full">
+                                    {{ $recipe->recipeTypeIcon() }}
+                                </span>
+                                <span class="text-xs font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
+                                    {{ $recipe->category->icon }} {{ $recipe->category->name }}
+                                </span>
+                            </div>
                             <span class="text-xs">{{ str_repeat('⭐', $recipe->difficulty) }}</span>
                         </div>
                         <h3 class="font-semibold text-gray-900 group-hover:text-orange-700 mb-2">{{ $recipe->name }}</h3>

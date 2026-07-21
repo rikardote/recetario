@@ -14,6 +14,7 @@ new class extends Component
             'categories', 'steps', 'equipment', 'tags',
             'variants', 'adaptations', 'concepts', 'errors',
             'recipeIngredients.ingredient', 'images', 'videos',
+            'dependencies', 'derivedRecipes',
         ]);
     }
 };
@@ -34,6 +35,9 @@ new class extends Component
     {{-- Header --}}
     <div class="mb-10">
         <div class="flex flex-wrap items-center gap-3 mb-4">
+            <span class="text-xs font-medium {{ $recipe->isDerived() ? 'bg-blue-50 text-blue-700' : 'bg-green-50 text-green-700' }} px-3 py-1 rounded-full">
+                {{ $recipe->recipeTypeIcon() }} {{ $recipe->recipeTypeLabel() }}
+            </span>
             <span class="text-xs font-medium text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
                 {{ $recipe->category->icon }} {{ $recipe->category->name }}
             </span>
@@ -254,6 +258,42 @@ new class extends Component
             @endif
         @endforeach
     </div>
+
+    {{-- Relaciones --}}
+    @if($recipe->isBase() && $recipe->derivedRecipes->count())
+        <div class="mt-12 border-t pt-8">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">🍽️ Utilizada en</h3>
+            <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                @foreach($recipe->derivedRecipes as $derived)
+                    <a href="/recetas/{{ $derived->slug }}"
+                       class="flex items-center gap-2 bg-blue-50 border border-blue-100 rounded-xl p-3 hover:border-blue-300 transition-colors">
+                        <span class="text-lg">🍽️</span>
+                        <span class="text-sm font-medium text-blue-800">{{ $derived->name }}</span>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @endif
+
+    @if($recipe->isDerived() && $recipe->dependencies->count())
+        <div class="mt-12 border-t pt-8">
+            <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">🧱 Basada en</h3>
+            <div class="space-y-2">
+                @foreach($recipe->dependencies as $dep)
+                    <a href="/recetas/{{ $dep->slug }}"
+                       class="flex items-center gap-3 bg-green-50 border border-green-100 rounded-xl p-3 hover:border-green-300 transition-colors">
+                        <span class="text-lg">🧱</span>
+                        <div>
+                            <span class="text-sm font-medium text-green-800">{{ $dep->name }}</span>
+                            @if($dep->pivot->quantity)
+                                <span class="text-xs text-green-600 ml-2">— {{ $dep->pivot->quantity }} {{ $dep->pivot->quantity_unit }}</span>
+                            @endif
+                        </div>
+                    </a>
+                @endforeach
+            </div>
+        </div>
+    @endif
 
     {{-- Notas del chef --}}
     @if($recipe->chef_notes)

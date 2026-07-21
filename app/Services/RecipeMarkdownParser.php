@@ -90,8 +90,8 @@ class RecipeMarkdownParser
 
         $recipe = Recipe::create([
             'name' => $data['name'] ?? 'Sin nombre',
-            'name' => $data['name'] ?? 'Sin nombre',
             'slug' => $slug,
+            'recipe_type' => $data['recipe_type'] ?? 'base',
             'description' => $data['description'] ?? ($data['objective'] ?? ''),
             'objective' => $data['objective'] ?? '',
             'prep_time' => $data['prep_time'] ?? 0,
@@ -117,6 +117,11 @@ class RecipeMarkdownParser
 
         // Sync categories (primary = first in list)
         $recipe->syncCategories($catIds, $primaryId);
+
+        // Sync dependencies (for derived recipes)
+        if (!empty($data['dependencies'])) {
+            $recipe->syncDependencies($data['dependencies']);
+        }
 
         // Tags
         if (!empty($data['tags'])) {
@@ -322,6 +327,7 @@ class RecipeMarkdownParser
 
         $inTags = false;
         $inCategories = false;
+        $inBaseRecipe = false;
         $inInstantPot = false;
 
         foreach ($lines as $line) {
@@ -339,6 +345,19 @@ class RecipeMarkdownParser
             }
             if ($inCategories && !str_starts_with($line, '- ')) {
                 $inCategories = false;
+            }
+
+            // base_recipe list (for derived recipes)
+            if (str_starts_with($line, 'base_recipe:')) {
+                $inBaseRecipe = true;
+                continue;
+            }
+            if ($inBaseRecipe && str_starts_with($line, '- ')) {
+                $this->result['dependencies'][] = trim(substr($line, 2));
+                continue;
+            }
+            if ($inBaseRecipe && !str_starts_with($line, '- ')) {
+                $inBaseRecipe = false;
             }
 
             // Tags list
@@ -374,6 +393,7 @@ class RecipeMarkdownParser
 
                 match ($key) {
                     'slug' => $this->result['slug'] = $val,
+                    'recipe_type' => $this->result['recipe_type'] = in_array($val, ['base', 'derived']) ? $val : 'base',
                     'category' => $this->result['categories'] = array_values(array_unique([ucfirst($val)])),
                     'difficulty' => $this->result['difficulty'] = (int) $val,
                     'servings' => $this->result['servings'] = (int) $val,

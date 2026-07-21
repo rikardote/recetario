@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Recipe extends Model
 {
     protected $fillable = [
-        'name', 'slug', 'description', 'objective',
+        'name', 'slug', 'recipe_type', 'description', 'objective',
         'prep_time', 'cook_time', 'total_time', 'servings', 'difficulty', 'cost',
         'result_texture', 'result_color', 'result_consistency',
         'result_temperature', 'result_flavor',
@@ -44,6 +44,61 @@ class Recipe extends Model
         // Prefer the primary category, fallback to first
         return $this->categories->first(fn($c) => $c->pivot->is_primary)
             ?? $this->categories->first();
+    }
+
+    /**
+     * Base recipes this derived recipe depends on.
+     */
+    public function dependencies(): BelongsToMany
+    {
+        return $this->belongsToMany(Recipe::class, 'recipe_dependencies', 'recipe_id', 'dependency_recipe_id')
+            ->withPivot(['quantity', 'quantity_unit', 'notes', 'sort_order'])
+            ->orderByPivot('sort_order');
+    }
+
+    /**
+     * Derived recipes that depend on this base recipe.
+     */
+    public function derivedRecipes(): BelongsToMany
+    {
+        return $this->belongsToMany(Recipe::class, 'recipe_dependencies', 'dependency_recipe_id', 'recipe_id')
+            ->withPivot(['quantity', 'quantity_unit', 'notes', 'sort_order'])
+            ->orderByPivot('sort_order');
+    }
+
+    public function isBase(): bool
+    {
+        return $this->recipe_type === 'base';
+    }
+
+    public function isDerived(): bool
+    {
+        return $this->recipe_type === 'derived';
+    }
+
+    public function recipeTypeLabel(): string
+    {
+        return $this->recipe_type === 'derived' ? 'Receta Derivada' : 'Receta Base';
+    }
+
+    public function recipeTypeIcon(): string
+    {
+        return $this->recipe_type === 'derived' ? '🍽️' : '🧱';
+    }
+
+    /**
+     * Sync dependencies for a derived recipe.
+     */
+    public function syncDependencies(array $dependencySlugs): void
+    {
+        $data = [];
+        foreach ($dependencySlugs as $i => $slug) {
+            $dep = Recipe::where('slug', trim($slug))->first();
+            if ($dep) {
+                $data[$dep->id] = ['sort_order' => $i];
+            }
+        }
+        $this->dependencies()->sync($data);
     }
 
     /**
