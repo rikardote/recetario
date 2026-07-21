@@ -1,12 +1,13 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Livewire\RecipeList;
 
 // Home
 Route::livewire('/', 'pages::home-page')->name('home');
 
 // Recipe listing
-Route::livewire('/recetas', 'pages::recipe-list')->name('recipes.index');
+Route::livewire('/recetas', RecipeList::class)->name('recipes.index');
 
 // Recipe detail
 Route::livewire('/recetas/{recipe:slug}', 'pages::recipe-detail')->name('recipes.show');
