@@ -26,7 +26,7 @@ new class extends Component
         <span>/</span>
         <a href="/recetas" class="hover:text-gray-600">Recetas</a>
         <span>/</span>
-        <a href="/recetas?categoria={{ $recipe->category->slug }}" class="hover:text-gray-600">{{ $recipe->category->name }}</a>
+        <a href="/recetas?category={{ $recipe->category->slug }}" class="hover:text-gray-600">{{ $recipe->category->name }}</a>
         <span>/</span>
         <span class="text-gray-600">{{ $recipe->name }}</span>
     </nav>

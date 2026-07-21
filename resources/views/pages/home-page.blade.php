@@ -52,7 +52,7 @@ new class extends Component
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             @php $cats = Category::withCount('publishedRecipes')->get(); @endphp
             @foreach($cats as $cat)
-                <a href="/recetas?categoria={{ $cat->slug }}"
+                <a href="/recetas?category={{ $cat->slug }}"
                    class="group flex flex-col items-center p-4 bg-gray-50 rounded-2xl hover:bg-orange-50 hover:border-orange-200 border border-transparent transition-all">
                     <span class="text-3xl mb-2">{{ $cat->icon }}</span>
                     <span class="text-sm font-medium text-gray-700 group-hover:text-orange-700">{{ $cat->name }}</span>
@@ -96,7 +96,7 @@ new class extends Component
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             @php $levels = [['n'=>1,'t'=>'Principiante','d'=>'Funciones básicas','s'=>'⭐'],['n'=>2,'t'=>'Básico','d'=>'Sellado y primeras recetas','s'=>'⭐⭐'],['n'=>3,'t'=>'Intermedio','d'=>'Salsas y reducciones','s'=>'⭐⭐⭐'],['n'=>4,'t'=>'Avanzado','d'=>'Pot in Pot y capas','s'=>'⭐⭐⭐⭐'],['n'=>5,'t'=>'Experto','d'=>'Recetas complejas','s'=>'⭐⭐⭐⭐⭐']]; @endphp
             @foreach($levels as $l)
-                <a href="/recetas?dificultad={{ $l['n'] }}"
+                <a href="/recetas?difficulty={{ $l['n'] }}"
                    class="block bg-white border border-gray-100 rounded-2xl p-5 hover:border-orange-200 hover:shadow-md transition-all">
                     <div class="text-lg mb-2">{{ $l['s'] }}</div>
                     <h3 class="font-semibold text-gray-900 mb-1">{{ $l['t'] }}</h3>
