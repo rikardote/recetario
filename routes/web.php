@@ -1,0 +1,39 @@
+<?php
+
+use Illuminate\Support\Facades\Route;
+
+// Home
+Route::livewire('/', 'pages::home-page')->name('home');
+
+// Recipe listing
+Route::livewire('/recetas', 'pages::recipe-list')->name('recipes.index');
+
+// Recipe detail
+Route::livewire('/recetas/{recipe:slug}', 'pages::recipe-detail')->name('recipes.show');
+
+// Search
+Route::livewire('/buscar', 'pages::recipe-search')->name('search');
+
+// Techniques
+Route::livewire('/tecnicas', 'pages::technique-list')->name('techniques.index');
+
+// Concepts
+Route::livewire('/conceptos', 'pages::concept-list')->name('concepts.index');
+
+// Functions
+Route::livewire('/funciones', 'pages::function-list')->name('functions.index');
+
+// Equipment
+Route::livewire('/accesorios', 'pages::equipment-list')->name('equipment.index');
+
+// Compare
+Route::livewire('/comparar', 'pages::compare-recipes')->name('compare');
+
+// Weekly Planner
+Route::livewire('/planeador', 'pages::weekly-planner')->name('planner');
+
+// Shopping List
+Route::livewire('/lista-compras', 'pages::shopping-list')->name('shopping-list');
+
+// Favorites
+Route::livewire('/favoritos', 'pages::favorite-button')->name('favorites');
