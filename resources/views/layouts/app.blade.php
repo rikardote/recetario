@@ -28,6 +28,7 @@
                     <a href="/funciones" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-50">Funciones IP</a>
                     <a href="/accesorios" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-50">Accesorios</a>
                     <a href="/comparar" class="px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg hover:bg-gray-50">Comparar</a>
+                    <a href="/importar" class="ml-2 px-4 py-2 text-sm font-semibold bg-orange-500 text-white rounded-xl hover:bg-orange-600 transition-colors shadow-sm">+ Nueva</a>
                 </div>
                 <div class="md:hidden flex items-center">
                     <button @click="open = !open" class="p-2 rounded-lg text-gray-600 hover:bg-gray-100">
@@ -46,6 +47,7 @@
                 <a href="/funciones" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg">Funciones IP</a>
                 <a href="/accesorios" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg">Accesorios</a>
                 <a href="/comparar" class="block px-3 py-2 text-sm font-medium text-gray-600 hover:text-gray-900 rounded-lg">Comparar</a>
+                <a href="/importar" class="block px-3 py-2 text-sm font-semibold text-orange-600 hover:bg-orange-50 rounded-lg">+ Nueva receta</a>
             </div>
         </div>
     </nav>

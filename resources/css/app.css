@@ -10,3 +10,21 @@
 [x-cloak] {
     display: none !important;
 }
+
+/* Print styles */
+@media print {
+    nav, footer, .print\:hidden {
+        display: none !important;
+    }
+
+    body {
+        font-size: 12pt;
+        color: #000;
+        background: #fff;
+    }
+
+    @page {
+        margin: 1.5cm;
+        size: A4;
+    }
+}

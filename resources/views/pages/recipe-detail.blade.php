@@ -57,6 +57,14 @@ new class extends Component
                 @endforeach
             </div>
         @endif
+
+        {{-- Action buttons --}}
+        <div class="flex flex-wrap gap-3 mt-5">
+            <a href="/recetas/{{ $recipe->slug }}/lista-compras"
+               class="inline-flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition-colors">
+                🧾 Lista de compras
+            </a>
+        </div>
     </div>
 
     {{-- Objetivo --}}

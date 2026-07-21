@@ -35,5 +35,11 @@ Route::livewire('/planeador', 'pages::weekly-planner')->name('planner');
 // Shopping List
 Route::livewire('/lista-compras', 'pages::shopping-list')->name('shopping-list');
 
+// Printable Shopping List per recipe
+Route::livewire('/recetas/{recipe:slug}/lista-compras', 'pages::shopping-list-print')->name('recipes.shopping-list');
+
+// Recipe Importer
+Route::livewire('/importar', 'pages::recipe-importer')->name('recipes.import');
+
 // Favorites
 Route::livewire('/favoritos', 'pages::favorite-button')->name('favorites');
