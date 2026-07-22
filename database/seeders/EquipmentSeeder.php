@@ -55,7 +55,7 @@ class EquipmentSeeder extends Seeder
         ];
 
         foreach ($items as $item) {
-            Equipment::create($item);
+            Equipment::firstOrCreate(["slug" => $item["slug"]], $item);
         }
     }
 }

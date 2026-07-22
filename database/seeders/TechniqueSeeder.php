@@ -61,7 +61,7 @@ class TechniqueSeeder extends Seeder
         ];
 
         foreach ($techniques as $t) {
-            Technique::create($t);
+            Technique::firstOrCreate(["slug" => $t["slug"]], $t);
         }
     }
 }

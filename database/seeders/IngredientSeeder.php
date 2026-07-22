@@ -26,7 +26,7 @@ class IngredientSeeder extends Seeder
         ];
 
         foreach ($ingredients as $i) {
-            Ingredient::create($i);
+            Ingredient::firstOrCreate(["slug" => $i["slug"]], $i);
         }
     }
 }

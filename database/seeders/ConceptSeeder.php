@@ -38,7 +38,7 @@ class ConceptSeeder extends Seeder
         ];
 
         foreach ($concepts as $c) {
-            Concept::create($c);
+            Concept::firstOrCreate(["slug" => $c["slug"]], $c);
         }
     }
 }

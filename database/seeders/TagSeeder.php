@@ -17,10 +17,10 @@ class TagSeeder extends Seeder
         ];
 
         foreach ($tags as $tag) {
-            Tag::create([
-                'name' => $tag,
-                'slug' => \Str::slug($tag),
-            ]);
+            Tag::firstOrCreate(
+                ['slug' => \Str::slug($tag)],
+                ['name' => $tag]
+            );
         }
     }
 }

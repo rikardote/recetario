@@ -49,7 +49,7 @@ class InstantPotFunctionSeeder extends Seeder
         ];
 
         foreach ($functions as $f) {
-            InstantPotFunction::create($f);
+            InstantPotFunction::firstOrCreate(["slug" => $f["slug"]], $f);
         }
     }
 }
