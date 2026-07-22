@@ -50,14 +50,13 @@ Route::get('/debug', function() {
     try {
         $r = \App\Models\Recipe::with('categories', 'steps', 'tags')->first();
         if (!$r) return 'No recipes in DB';
-        return [
-            'name' => $r->name,
-            'slug' => $r->slug,
-            'categories' => $r->categories->pluck('name'),
-            'steps' => $r->steps->count(),
-            'category_accessor' => $r->category?->name,
-        ];
+        $out = "Name: {$r->name}\nSlug: {$r->slug}\n";
+        $out .= "Categories: " . $r->categories->pluck('name')->implode(', ') . "\n";
+        $out .= "Steps: " . $r->steps->count() . "\n";
+        $out .= "Category accessor: " . ($r->category?->name ?? 'NULL') . "\n";
+        return response($out, 200)->header('Content-Type', 'text/plain');
     } catch(\Exception $e) {
-        return $e->getMessage() . "\n\n" . $e->getTraceAsString();
+        return response($e->getMessage() . "\n\n" . $e->getTraceAsString(), 500)
+            ->header('Content-Type', 'text/plain');
     }
 });
