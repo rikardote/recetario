@@ -9,6 +9,7 @@ new class extends Component
 {
     public Recipe $recipe;
     public $activeTab = 'procedimiento';
+    public $confirmingDelete = false;
 
     public function mount(Recipe $recipe)
     {
@@ -17,6 +18,41 @@ new class extends Component
             'variants', 'adaptations', 'concepts', 'errors',
             'recipeIngredients.ingredient', 'images', 'videos',
         ]);
+    }
+
+    public function confirmDelete()
+    {
+        $this->confirmingDelete = true;
+    }
+
+    public function cancelDelete()
+    {
+        $this->confirmingDelete = false;
+    }
+
+    public function deleteRecipe()
+    {
+        $recipeName = $this->recipe->name;
+        $this->recipe->steps()->delete();
+        $this->recipe->recipeIngredients()->delete();
+        $this->recipe->variants()->delete();
+        $this->recipe->adaptations()->delete();
+        $this->recipe->concepts()->delete();
+        $this->recipe->errors()->delete();
+        $this->recipe->images()->delete();
+        $this->recipe->videos()->delete();
+        $this->recipe->categories()->detach();
+        $this->recipe->tags()->detach();
+        $this->recipe->equipment()->detach();
+        $this->recipe->favorites()->delete();
+        $this->recipe->views()->delete();
+        $this->recipe->dependencies()->detach();
+        $this->recipe->derivedRecipes()->detach();
+        $this->recipe->delete();
+
+        session()->flash('success', "✅ Receta «{$recipeName}» eliminada correctamente.");
+
+        $this->redirect(route('recipes.index'));
     }
 
     public function render()
@@ -42,12 +78,17 @@ new class extends Component
 
     {{-- Header --}}
     <div class="mb-10">
-        <div class="flex flex-wrap items-center gap-3 mb-4">
-            <span class="text-xs font-medium text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
-                {{ $recipe->category->icon }} {{ $recipe->category->name }}
-            </span>
-            <span class="text-sm text-gray-400">{{ str_repeat('⭐', $recipe->difficulty) }}</span>
-            <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">{{ $recipe->cost }}</span>
+        <div class="flex flex-wrap items-center justify-between gap-3 mb-4">
+            <div class="flex flex-wrap items-center gap-3">
+                <span class="text-xs font-medium text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
+                    {{ $recipe->category->icon }} {{ $recipe->category->name }}
+                </span>
+                <span class="text-sm text-gray-400">{{ str_repeat('⭐', $recipe->difficulty) }}</span>
+                <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">{{ $recipe->cost }}</span>
+            </div>
+            <button wire:click="confirmDelete" class="text-xs text-red-400 hover:text-red-600 transition-colors px-3 py-1.5 rounded-lg hover:bg-red-50 border border-transparent hover:border-red-200">
+                🗑️ Eliminar
+            </button>
         </div>
         <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{{ $recipe->name }}</h1>
         <p class="text-lg text-gray-500 max-w-2xl leading-relaxed">{{ $recipe->description }}</p>
@@ -375,6 +416,37 @@ new class extends Component
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">👨‍🍳 Notas del chef</h3>
             <div class="bg-gray-50 rounded-2xl p-6 text-gray-700 leading-relaxed">
                 {{ $recipe->chef_notes }}
+            </div>
+        </div>
+    @endif
+
+    {{-- Modal de confirmación para eliminar --}}
+    @if($confirmingDelete)
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4" x-data>
+            {{-- Overlay --}}
+            <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" wire:click="cancelDelete"></div>
+            {{-- Modal --}}
+            <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 z-10">
+                <div class="text-center">
+                    <div class="text-5xl mb-4">⚠️</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">¿Eliminar receta?</h3>
+                    <p class="text-gray-500 mb-2">
+                        Estás a punto de eliminar <strong>«{{ $recipe->name }}»</strong>
+                    </p>
+                    <p class="text-sm text-red-500 mb-6">
+                        Esta acción no se puede deshacer. Se eliminarán todos los pasos, ingredientes, variantes y datos asociados.
+                    </p>
+                    <div class="flex gap-3 justify-center">
+                        <button wire:click="cancelDelete"
+                            class="px-6 py-2.5 rounded-xl font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors">
+                            Cancelar
+                        </button>
+                        <button wire:click="deleteRecipe"
+                            class="px-6 py-2.5 rounded-xl font-medium text-white bg-red-600 hover:bg-red-700 transition-colors">
+                            🗑️ Sí, eliminar
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     @endif

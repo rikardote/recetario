@@ -7,6 +7,7 @@ use App\Models\RecipeIngredient;
 new class extends Component
 {
     public $recipe;
+    public $confirmingDelete = false;
 
     public function mount(Recipe $recipe)
     {
@@ -16,6 +17,41 @@ new class extends Component
             'recipeIngredients.ingredient', 'images', 'videos',
             'dependencies', 'derivedRecipes',
         ]);
+    }
+
+    public function confirmDelete()
+    {
+        $this->confirmingDelete = true;
+    }
+
+    public function cancelDelete()
+    {
+        $this->confirmingDelete = false;
+    }
+
+    public function deleteRecipe()
+    {
+        $recipeName = $this->recipe->name;
+        $this->recipe->steps()->delete();
+        $this->recipe->recipeIngredients()->delete();
+        $this->recipe->variants()->delete();
+        $this->recipe->adaptations()->delete();
+        $this->recipe->concepts()->delete();
+        $this->recipe->errors()->delete();
+        $this->recipe->images()->delete();
+        $this->recipe->videos()->delete();
+        $this->recipe->categories()->detach();
+        $this->recipe->tags()->detach();
+        $this->recipe->equipment()->detach();
+        $this->recipe->favorites()->delete();
+        $this->recipe->views()->delete();
+        $this->recipe->dependencies()->detach();
+        $this->recipe->derivedRecipes()->detach();
+        $this->recipe->delete();
+
+        session()->flash('success', "✅ Receta «{$recipeName}» eliminada correctamente.");
+
+        $this->redirect(route('recipes.index'));
     }
 };
 ?>
@@ -75,6 +111,10 @@ new class extends Component
                class="inline-flex items-center gap-2 bg-orange-500 text-white px-4 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition-colors">
                 🧾 Lista de compras
             </a>
+            <button wire:click="confirmDelete"
+                class="inline-flex items-center gap-2 text-red-400 hover:text-red-600 px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-50 border border-transparent hover:border-red-200 transition-colors">
+                🗑️ Eliminar
+            </button>
         </div>
     </div>
 
@@ -300,6 +340,37 @@ new class extends Component
         <div class="mt-12 border-t pt-8">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">👨‍🍳 Notas del chef</h3>
             <div class="bg-gray-50 rounded-2xl p-6 text-gray-700 leading-relaxed">{{ $recipe->chef_notes }}</div>
+        </div>
+    @endif
+
+    {{-- Modal de confirmación para eliminar --}}
+    @if($confirmingDelete)
+        <div class="fixed inset-0 z-50 flex items-center justify-center p-4" x-data>
+            {{-- Overlay --}}
+            <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" wire:click="cancelDelete"></div>
+            {{-- Modal --}}
+            <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 z-10">
+                <div class="text-center">
+                    <div class="text-5xl mb-4">⚠️</div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-2">¿Eliminar receta?</h3>
+                    <p class="text-gray-500 mb-2">
+                        Estás a punto de eliminar <strong>«{{ $recipe->name }}»</strong>
+                    </p>
+                    <p class="text-sm text-red-500 mb-6">
+                        Esta acción no se puede deshacer. Se eliminarán todos los pasos, ingredientes, variantes y datos asociados.
+                    </p>
+                    <div class="flex gap-3 justify-center">
+                        <button wire:click="cancelDelete"
+                            class="px-6 py-2.5 rounded-xl font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors">
+                            Cancelar
+                        </button>
+                        <button wire:click="deleteRecipe"
+                            class="px-6 py-2.5 rounded-xl font-medium text-white bg-red-600 hover:bg-red-700 transition-colors">
+                            🗑️ Sí, eliminar
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
     @endif
 </div>
