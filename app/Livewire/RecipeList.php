@@ -16,7 +16,6 @@ class RecipeList extends Component
     public $difficulty = '';
 
     protected $queryString = [
-        'search' => ['except' => ''],
         'category' => ['except' => ''],
         'difficulty' => ['except' => ''],
     ];
