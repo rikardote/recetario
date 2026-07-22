@@ -65,13 +65,13 @@ new class extends Component
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     {{-- Breadcrumb --}}
     <nav class="flex items-center gap-2 text-sm text-gray-400 mb-8">
-        <a href="/" class="hover:text-gray-600">Inicio</a>
+        <a href="/" class="hover:text-gray-600 dark:text-gray-400">Inicio</a>
         <span>/</span>
-        <a href="/recetas" class="hover:text-gray-600">Recetas</a>
+        <a href="/recetas" class="hover:text-gray-600 dark:text-gray-400">Recetas</a>
         <span>/</span>
-        <a href="/recetas?category={{ $recipe->category->slug }}" class="hover:text-gray-600">{{ $recipe->category->name }}</a>
+        <a href="/recetas?category={{ $recipe->category->slug }}" class="hover:text-gray-600 dark:text-gray-400">{{ $recipe->category->name }}</a>
         <span>/</span>
-        <span class="text-gray-600">{{ $recipe->name }}</span>
+        <span class="text-gray-600 dark:text-gray-400">{{ $recipe->name }}</span>
     </nav>
 
     {{-- Header --}}
@@ -93,8 +93,8 @@ new class extends Component
             <span class="text-sm text-gray-400">{{ str_repeat('⭐', $recipe->difficulty) }}</span>
             <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">{{ $recipe->cost }}</span>
         </div>
-        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{{ $recipe->name }}</h1>
-        <p class="text-lg text-gray-500 max-w-2xl leading-relaxed">{{ $recipe->description }}</p>
+        <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-gray-100 mb-4">{{ $recipe->name }}</h1>
+        <p class="text-lg text-gray-500 dark:text-gray-400 max-w-2xl leading-relaxed">{{ $recipe->description }}</p>
 
         <div class="flex flex-wrap gap-6 mt-6 text-sm text-gray-500">
             <div><span class="text-gray-400">⏱ Prep:</span> <span class="font-medium text-gray-700">{{ $recipe->prep_time }} min</span></div>
@@ -123,7 +123,7 @@ new class extends Component
             </button>
             @if($recipe->source_markdown)
                 <button wire:click="toggleSource"
-                    class="inline-flex items-center gap-2 text-gray-400 hover:text-gray-600 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 border border-transparent hover:border-gray-200 transition-colors">
+                    class="inline-flex items-center gap-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 border border-transparent hover:border-gray-200 transition-colors">
                     {{ $showSource ? '📝 Ocultar fuente' : '📝 Ver fuente' }}
                 </button>
             @endif
@@ -135,16 +135,16 @@ new class extends Component
         <div class="mb-8 border border-gray-200 rounded-2xl overflow-hidden">
             <div class="bg-gray-50 px-5 py-3 border-b border-gray-200 flex items-center justify-between">
                 <h2 class="font-semibold text-gray-700 text-sm">📝 Fuente original (Markdown)</h2>
-                <button wire:click="toggleSource" class="text-xs text-gray-400 hover:text-gray-600">✕ Cerrar</button>
+                <button wire:click="toggleSource" class="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300">✕ Cerrar</button>
             </div>
-            <pre class="px-5 py-4 text-xs font-mono text-gray-600 bg-white overflow-auto max-h-96 leading-relaxed">{{ $recipe->source_markdown }}</pre>
+            <pre class="px-5 py-4 text-xs font-mono text-gray-600 dark:text-gray-400 bg-white overflow-auto max-h-96 leading-relaxed">{{ $recipe->source_markdown }}</pre>
         </div>
     @endif
 
     {{-- Objetivo --}}
-    <div class="bg-orange-50 border border-orange-100 rounded-2xl p-6 mb-8">
-        <h2 class="text-sm font-semibold text-orange-700 uppercase tracking-wide mb-2">🎯 Objetivo</h2>
-        <p class="text-gray-700 leading-relaxed">{{ $recipe->objective }}</p>
+    <div class="dark:bg-orange-900/20 dark:border-orange-800 bg-orange-50 border border-orange-100 rounded-2xl p-6 mb-8">
+        <h2 class="text-sm font-semibold text-orange-700 dark:text-orange-300 uppercase tracking-wide mb-2">🎯 Objetivo</h2>
+        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">{{ $recipe->objective }}</p>
     </div>
 
     {{-- Procedimiento --}}
@@ -159,7 +159,7 @@ new class extends Component
                     <div class="flex-1 space-y-4">
                         <div>
                             <h3 class="font-semibold text-gray-900 mb-1">Paso {{ $step->step_number }}</h3>
-                            <p class="text-gray-700 leading-relaxed">{{ $step->action }}</p>
+                            <p class="text-gray-700 dark:text-gray-300 leading-relaxed">{{ $step->action }}</p>
                         </div>
                         @if($step->technical_fundament)
                             <div class="bg-blue-50 rounded-xl p-4 border border-blue-100">
@@ -252,7 +252,7 @@ new class extends Component
             @foreach($recipe->adaptations as $adaptation)
                 <div class="border border-gray-100 rounded-2xl p-6">
                     <h3 class="font-semibold text-gray-900 mb-2">{{ $adaptation->scenario }}</h3>
-                    <p class="text-sm text-gray-600 leading-relaxed">{{ $adaptation->adaptation_text }}</p>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{{ $adaptation->adaptation_text }}</p>
                 </div>
             @endforeach
         </div>
@@ -278,8 +278,8 @@ new class extends Component
             @foreach($recipe->errors as $error)
                 <div class="border border-red-100 rounded-2xl p-6 bg-red-50/50">
                     <h3 class="font-semibold text-red-800 mb-3">⚠️ {{ $error->problem }}</h3>
-                    @if($error->possible_cause)<div class="text-sm text-gray-600 mb-2"><strong class="text-red-700">Posible causa:</strong> {{ $error->possible_cause }}</div>@endif
-                    <div class="text-sm text-gray-600"><strong class="text-green-700">✅ Solución:</strong> {{ $error->solution }}</div>
+                    @if($error->possible_cause)<div class="text-sm text-gray-600 dark:text-gray-400 mb-2"><strong class="text-red-700">Posible causa:</strong> {{ $error->possible_cause }}</div>@endif
+                    <div class="text-sm text-gray-600 dark:text-gray-400"><strong class="text-green-700">✅ Solución:</strong> {{ $error->solution }}</div>
                 </div>
             @endforeach
         </div>
@@ -362,7 +362,7 @@ new class extends Component
     @if($recipe->chef_notes)
         <div class="mt-12 border-t pt-8">
             <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">👨‍🍳 Notas del chef</h3>
-            <div class="bg-gray-50 rounded-2xl p-6 text-gray-700 leading-relaxed">{{ $recipe->chef_notes }}</div>
+            <div class="dark:bg-gray-800 bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-gray-700 dark:text-gray-300 dark:text-gray-300 leading-relaxed">{{ $recipe->chef_notes }}</div>
         </div>
     @endif
 

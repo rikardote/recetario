@@ -59,9 +59,9 @@ new class extends Component
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             @foreach($categories as $cat)
                 <a href="/recetas?category={{ $cat->slug }}"
-                   class="group flex flex-col items-center p-4 bg-gray-50 rounded-2xl hover:bg-orange-50 hover:border-orange-200 border border-transparent transition-all">
+                   class="group flex flex-col items-center p-4 dark:bg-gray-800 bg-gray-50 rounded-2xl hover:bg-orange-50 dark:hover:bg-orange-900/20 hover:border-orange-200 border border-transparent transition-all">
                     <span class="text-3xl mb-2">{{ $cat->icon }}</span>
-                    <span class="text-sm font-medium text-gray-700 group-hover:text-orange-700">{{ $cat->name }}</span>
+                    <span class="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-orange-700 dark:group-hover:text-orange-400">{{ $cat->name }}</span>
                     <span class="text-xs text-gray-400 mt-1">{{ $cat->published_recipes_count }}</span>
                 </a>
             @endforeach
@@ -76,15 +76,15 @@ new class extends Component
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($recentRecipes as $recipe)
                 <a href="/recetas/{{ $recipe->slug }}"
-                   class="group block bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-200 hover:shadow-lg hover:shadow-orange-50 transition-all">
+                   class="group block dark:bg-gray-800 dark:border-gray-700 bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-200 dark:hover:border-orange-700 hover:shadow-lg hover:shadow-orange-50 transition-all">
                     <div class="flex items-start justify-between mb-3">
                         <span class="text-xs font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
                             {{ $recipe->category?->icon ?? '' }} {{ $recipe->category?->name }}
                         </span>
                         <span class="text-xs text-gray-400">{{ str_repeat('⭐', $recipe->difficulty) }}</span>
                     </div>
-                    <h3 class="font-semibold text-gray-900 group-hover:text-orange-700 mb-2">{{ $recipe->name }}</h3>
-                    <p class="text-sm text-gray-500 line-clamp-2 mb-4">{{ $recipe->description }}</p>
+                    <h3 class="font-semibold text-gray-900 dark:text-gray-100 group-hover:text-orange-700 dark:group-hover:text-orange-400 mb-2">{{ $recipe->name }}</h3>
+                    <p class="text-sm text-gray-500 dark:text-gray-400 line-clamp-2 mb-4">{{ $recipe->description }}</p>
                     <div class="flex items-center gap-4 text-xs text-gray-400">
                         <span>⏱ {{ $recipe->total_time }} min</span>
                         <span>🍽 {{ $recipe->servings }} porc.</span>
@@ -110,7 +110,7 @@ new class extends Component
     </section>
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl p-8 md:p-12 text-center">
+        <div class="dark:from-orange-900/30 dark:to-orange-800/20 bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl p-8 md:p-12 text-center">
             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">¿Listo para dominar tu Instant Pot?</h2>
             <p class="text-gray-600 max-w-xl mx-auto mb-8">Explora recetas y descubre los fundamentos técnicos detrás de cada preparación.</p>
             <div class="flex justify-center gap-4">
