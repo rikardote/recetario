@@ -406,7 +406,7 @@ class RecipeMarkdownParser
                     'servings' => $this->result['servings'] = (int) $val,
                     'prep_time' => $this->result['prep_time'] = $this->parseMinutes($val),
                     'cook_time' => $this->result['cook_time'] = $this->parseMinutes($val),
-                    'release' => $this->result['pressure_release'] = $this->normalizeRelease($val),
+                    'release' => $this->handleReleaseFromHeader($val),
                     'total_time' => $this->result['total_time'] = $this->parseMinutes($val),
                     'cost' => $this->result['cost'] = $val,
                     default => null,
@@ -633,15 +633,24 @@ class RecipeMarkdownParser
             'aroma' => 'result_flavor',
             'sabor' => 'result_flavor',
             'temperatura' => 'result_temperature',
+            'carne' => 'result_texture',
+            'caldo' => 'result_consistency',
+            'verduras' => 'result_texture',
+            'pollo' => 'result_texture',
+            'salsa' => 'result_consistency',
         ];
 
         foreach ($parts as $part) {
             if (preg_match('/^##\s+(.+?)\s*\n(.*)/us', $part, $m)) {
                 $key = strtolower(trim($m[1]));
                 $val = trim($m[2]);
-                if (isset($map[$key]) && !empty($val)) {
-                    $field = $map[$key];
-                    $this->result[$field] = trim(($this->result[$field] ?? '') . ($this->result[$field] ?? false ? '. ' : '') . $val);
+                if (!empty($val)) {
+                    if (isset($map[$key])) {
+                        $field = $map[$key];
+                        $this->result[$field] = trim(($this->result[$field] ?? '') . ($this->result[$field] ?? false ? '. ' : '') . $val);
+                    }
+                    // Siempre guardar en description como resultado incluso si no hay mapeo específico
+                    $this->result['result_description'] = trim(($this->result['result_description'] ?? '') . ($this->result['result_description'] ?? false ? '. ' : '') . ucfirst($key) . ': ' . $val);
                 }
             }
         }
@@ -880,6 +889,19 @@ class RecipeMarkdownParser
         }
 
         $this->result['categories'] = array_values($cats);
+    }
+
+    private function handleReleaseFromHeader(string $val): string
+    {
+        // Extraer tipo y tiempo del formato "Natural 15 min" o "rápida"
+        $normalized = $this->normalizeRelease($val);
+        $this->result['pressure_release'] = $normalized;
+        if ($normalized === 'natural') {
+            $this->result['pressure_release_time'] = $this->parseMinutes($val) ?: 10;
+        } else {
+            $this->result['pressure_release_time'] = 0;
+        }
+        return $normalized;
     }
 
     private function handleRelease(string $val): void
