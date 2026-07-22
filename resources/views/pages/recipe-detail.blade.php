@@ -8,6 +8,7 @@ new class extends Component
 {
     public $recipe;
     public $confirmingDelete = false;
+    public $showSource = false;
 
     public function mount(Recipe $recipe)
     {
@@ -17,6 +18,11 @@ new class extends Component
             'recipeIngredients.ingredient', 'images', 'videos',
             'dependencies', 'derivedRecipes',
         ]);
+    }
+
+    public function toggleSource()
+    {
+        $this->showSource = !$this->showSource;
     }
 
     public function confirmDelete()
@@ -115,8 +121,25 @@ new class extends Component
                 class="inline-flex items-center gap-2 text-red-400 hover:text-red-600 px-4 py-2 rounded-xl text-sm font-medium hover:bg-red-50 border border-transparent hover:border-red-200 transition-colors">
                 🗑️ Eliminar
             </button>
+            @if($recipe->source_markdown)
+                <button wire:click="toggleSource"
+                    class="inline-flex items-center gap-2 text-gray-400 hover:text-gray-600 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 border border-transparent hover:border-gray-200 transition-colors">
+                    {{ $showSource ? '📝 Ocultar fuente' : '📝 Ver fuente' }}
+                </button>
+            @endif
         </div>
     </div>
+
+    {{-- Fuente Markdown (solo a solicitud) --}}
+    @if($showSource && $recipe->source_markdown)
+        <div class="mb-8 border border-gray-200 rounded-2xl overflow-hidden">
+            <div class="bg-gray-50 px-5 py-3 border-b border-gray-200 flex items-center justify-between">
+                <h2 class="font-semibold text-gray-700 text-sm">📝 Fuente original (Markdown)</h2>
+                <button wire:click="toggleSource" class="text-xs text-gray-400 hover:text-gray-600">✕ Cerrar</button>
+            </div>
+            <pre class="px-5 py-4 text-xs font-mono text-gray-600 bg-white overflow-auto max-h-96 leading-relaxed">{{ $recipe->source_markdown }}</pre>
+        </div>
+    @endif
 
     {{-- Objetivo --}}
     <div class="bg-orange-50 border border-orange-100 rounded-2xl p-6 mb-8">

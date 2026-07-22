@@ -151,6 +151,7 @@ class RecipeMarkdownParser
             'pressure_release_time' => $data['pressure_release_time'] ?? null,
             'saute_time' => $data['saute_time'] ?? null,
             'chef_notes' => $data['chef_notes'] ?? null,
+            'source_markdown' => $this->md,
             'is_published' => true,
         ]);
 

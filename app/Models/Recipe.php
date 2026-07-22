@@ -15,7 +15,7 @@ class Recipe extends Model
         'result_temperature', 'result_flavor',
         'storage_refrigeration', 'storage_freezing', 'storage_reheating',
         'pressure_cook_time', 'pressure_release', 'pressure_release_time',
-        'saute_time', 'chef_notes', 'is_published',
+        'saute_time', 'chef_notes', 'source_markdown', 'is_published',
     ];
 
     protected function casts(): array
