@@ -1,4 +1,4 @@
-FROM php:8.3-apache
+FROM php:8.4-apache
 
 # Instalar extensiones de PHP y utilidades necesarias
 RUN apt-get update && apt-get install -y \
@@ -44,17 +44,22 @@ RUN ln -s /usr/local/lib/node_modules/npm/bin/npm-cli.js /usr/local/bin/npm \
 WORKDIR /var/www/html
 
 # Copiar archivos de dependencias primero (para aprovechar caché de Docker)
-COPY composer.json composer.lock package.json package-lock.json ./
+COPY composer.json composer.lock package.json package-lock.json vite.config.js ./
 COPY .npmrc ./
+COPY resources/ resources/
+COPY public/ public/
 
-# Instalar dependencias de Composer (solo producción)
-RUN composer install --no-dev --no-interaction --no-progress --optimize-autoloader
+# Instalar dependencias de Composer (solo producción, sin scripts porque artisan no existe aún)
+RUN composer install --no-dev --no-interaction --no-progress --optimize-autoloader --no-scripts
 
 # Instalar dependencias npm y construir assets
 RUN npm ci --ignore-scripts && npm run build && rm -rf node_modules
 
 # Copiar el resto del código de la aplicación
 COPY . .
+
+# Ejecutar scripts de Composer que necesitan artisan (post-autoload-dump, package:discover)
+RUN composer run post-autoload-dump --no-dev 2>/dev/null || true
 
 # Dar permisos al entrypoint
 COPY docker-entrypoint.sh /usr/local/bin/
