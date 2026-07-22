@@ -18,7 +18,7 @@ class DatabaseSeeder extends Seeder
             ConceptSeeder::class,
             // RecipeSeeder::class,       // Recetas demo (reemplazadas por las existentes)
             // BaseRecipesSeeder::class,   // Recetas base duplicadas (reemplazadas)
-            ExistingRecipesSeeder::class,  // Las 9 recetas reales de la base de datos
+            RecipesFromMarkdownSeeder::class,  // Recetas desde archivos .rms.md
         ]);
     }
 }
