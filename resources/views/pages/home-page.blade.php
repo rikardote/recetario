@@ -1,20 +1,10 @@
 <?php
 
 use Livewire\Component;
-use Livewire\Attributes\Layout;
 use App\Models\Recipe;
-use App\Models\Category;
 use App\Models\Technique;
 
-new class extends Component
-{
-    public $search = '';
-
-    public function search()
-    {
-        $this->redirect(route('search', ['q' => $this->search]), navigate: false);
-    }
-};
+new class extends Component {};
 ?>
 
 <div>
@@ -28,8 +18,8 @@ new class extends Component
                 El manual más completo en español. Domina técnicas culinarias, comprende el porqué de cada paso y crea tus propias recetas con criterio técnico.
             </p>
             <div class="max-w-xl mx-auto mb-8">
-                <form wire:submit="search" class="relative">
-                    <input type="text" wire:model="search" placeholder="Buscar recetas, técnicas, ingredientes..."
+                <form action="/buscar" method="GET" class="relative">
+                    <input type="text" name="q" placeholder="Buscar recetas, técnicas, ingredientes..."
                         class="w-full px-6 py-4 text-lg border-2 border-gray-200 rounded-2xl focus:border-orange-400 focus:ring-4 focus:ring-orange-100 outline-none transition-all">
                     <button type="submit" class="absolute right-3 top-1/2 -translate-y-1/2 bg-orange-500 text-white px-5 py-2 rounded-xl text-sm font-semibold hover:bg-orange-600 transition-colors">
                         Buscar
