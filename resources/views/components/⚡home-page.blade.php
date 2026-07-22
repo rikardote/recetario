@@ -29,7 +29,7 @@ new class extends Component
 <div>
     <section class="py-20 md:py-32 px-4">
         <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-4xl md:text-6xl font-bold text-gray-900 tracking-tight leading-tight mb-6">
+            <h1 class="text-4xl md:text-6xl font-bold text-gray-900 dark:text-white tracking-tight leading-tight mb-6">
                 Aprende a cocinar con <span class="text-orange-500">Instant Pot</span>
             </h1>
             <p class="text-lg md:text-xl text-gray-500 max-w-2xl mx-auto mb-10 leading-relaxed">
@@ -55,7 +55,7 @@ new class extends Component
     </section>
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <h2 class="text-2xl font-bold text-gray-900 mb-8">Categorías</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">Categorías</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
             @foreach($categories as $cat)
                 <a href="/recetas?category={{ $cat->slug }}"
@@ -70,7 +70,7 @@ new class extends Component
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
         <div class="flex justify-between items-center mb-8">
-            <h2 class="text-2xl font-bold text-gray-900">Recetas recientes</h2>
+            <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Recetas recientes</h2>
             <a href="/recetas" class="text-sm font-medium text-orange-600 hover:text-orange-700">Ver todas →</a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -95,7 +95,7 @@ new class extends Component
     </section>
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
-        <h2 class="text-2xl font-bold text-gray-900 mb-8">Ruta de aprendizaje</h2>
+        <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-8">Ruta de aprendizaje</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
             @php $levels = [['n'=>1,'t'=>'Principiante','d'=>'Funciones básicas','s'=>'⭐'],['n'=>2,'t'=>'Básico','d'=>'Sellado y primeras recetas','s'=>'⭐⭐'],['n'=>3,'t'=>'Intermedio','d'=>'Salsas y reducciones','s'=>'⭐⭐⭐'],['n'=>4,'t'=>'Avanzado','d'=>'Pot in Pot y capas','s'=>'⭐⭐⭐⭐'],['n'=>5,'t'=>'Experto','d'=>'Recetas complejas','s'=>'⭐⭐⭐⭐⭐']]; @endphp
             @foreach($levels as $l)
@@ -111,7 +111,7 @@ new class extends Component
 
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
         <div class="dark:from-orange-900/30 dark:to-orange-800/20 bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl p-8 md:p-12 text-center">
-            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">¿Listo para dominar tu Instant Pot?</h2>
+            <h2 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white dark:text-white mb-4">¿Listo para dominar tu Instant Pot?</h2>
             <p class="text-gray-600 max-w-xl mx-auto mb-8">Explora recetas y descubre los fundamentos técnicos detrás de cada preparación.</p>
             <div class="flex justify-center gap-4">
                 <a href="/recetas" class="bg-orange-500 text-white px-6 py-3 rounded-xl font-semibold hover:bg-orange-600 transition-colors">Explorar recetas</a>

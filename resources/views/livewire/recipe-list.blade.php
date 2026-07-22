@@ -1,6 +1,6 @@
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
     <div class="flex items-center justify-between mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Recetas</h1>
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Recetas</h1>
         {{-- Mobile filter toggle --}}
         <button x-data @click="$refs.sidebar.classList.toggle('hidden')"
             class="lg:hidden flex items-center gap-2 text-sm font-medium text-orange-600 bg-orange-50 px-4 py-2 rounded-xl hover:bg-orange-100 transition-colors">
@@ -63,7 +63,7 @@
                         class="w-full px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl focus:border-orange-400 dark:focus:border-orange-500 dark:bg-gray-800 dark:text-gray-100 focus:ring-2 focus:ring-orange-100 outline-none text-sm">
                 </div>
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">Dificultad</h3>
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 dark:text-gray-100 mb-2">Dificultad</h3>
                     <div class="space-y-1">
                         @foreach(range(1,5) as $d)
                             <button wire:click="$set('difficulty', '{{ $difficulty == $d ? '' : $d }}')"
@@ -74,7 +74,7 @@
                     </div>
                 </div>
                 <div>
-                    <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 mb-2">Categorías</h3>
+                    <h3 class="text-sm font-semibold text-gray-900 dark:text-gray-100 dark:text-gray-100 mb-2">Categorías</h3>
                     @foreach(\App\Models\Category::withCount('publishedRecipes')->get() as $cat)
                         <button wire:click="filterCategory('{{ $cat->slug }}')"
                             class="flex justify-between w-full text-left px-3 py-1.5 text-sm rounded-lg transition-colors {{ $category === $cat->slug ? 'bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-300' : 'text-gray-600 dark:text-gray-400 hover:bg-gray-50 dark:hover:bg-gray-800/50' }}">
