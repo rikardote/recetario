@@ -158,7 +158,7 @@ new class extends Component
                     </span>
                     <div class="flex-1 space-y-4">
                         <div>
-                            <h3 class="font-semibold text-gray-900 mb-1">Paso {{ $step->step_number }}</h3>
+                            <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">Paso {{ $step->step_number }}</h3>
                             <p class="text-gray-700 dark:text-gray-300 leading-relaxed">{{ $step->action }}</p>
                         </div>
                         @if($step->technical_fundament)
@@ -192,7 +192,7 @@ new class extends Component
         @foreach(['proteinas' => '🍖 Proteínas', 'verduras' => '🥕 Verduras', 'liquidos' => '💧 Líquidos', 'condimentos' => '🌿 Condimentos', 'terminacion' => '✨ Terminación'] as $cat => $label)
             @if(isset($grouped[$cat]) && $grouped[$cat]->count())
                 <div>
-                    <h3 class="font-semibold text-gray-900 mb-3">{{ $label }}</h3>
+                    <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ $label }}</h3>
                     <ul class="space-y-2">
                         @foreach($grouped[$cat] as $ri)
                             <li class="flex items-center gap-2 text-gray-700">
@@ -217,7 +217,7 @@ new class extends Component
         <div class="space-y-4 mb-12">
             @foreach($recipe->equipment as $eq)
                 <div class="border border-gray-100 rounded-2xl p-6">
-                    <h3 class="font-semibold text-gray-900 mb-2">{{ $eq->name }}</h3>
+                    <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{{ $eq->name }}</h3>
                     <p class="text-sm text-gray-500 mb-3">{{ $eq->description }}</p>
                     @if($eq->when_to_use)
                         <div class="text-sm text-green-700 bg-green-50 rounded-lg p-3 mb-2"><strong>✅ Usar cuando:</strong> {{ $eq->when_to_use }}</div>
@@ -236,7 +236,7 @@ new class extends Component
         <div class="space-y-4 mb-12">
             @foreach($recipe->variants as $variant)
                 <div class="border border-gray-100 rounded-2xl p-6">
-                    <h3 class="font-semibold text-gray-900 mb-2">{{ $variant->name }}</h3>
+                    <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{{ $variant->name }}</h3>
                     @if($variant->description)<p class="text-sm text-gray-500 mb-3">{{ $variant->description }}</p>@endif
                     @if($variant->ingredients_changes)<div class="bg-yellow-50 rounded-lg p-3 mb-2 text-sm"><strong>🧂 Ingredientes:</strong> {{ $variant->ingredients_changes }}</div>@endif
                     @if($variant->procedure_changes)<div class="bg-yellow-50 rounded-lg p-3 text-sm"><strong>📋 Procedimiento:</strong> {{ $variant->procedure_changes }}</div>@endif
@@ -251,7 +251,7 @@ new class extends Component
         <div class="space-y-4 mb-12">
             @foreach($recipe->adaptations as $adaptation)
                 <div class="border border-gray-100 rounded-2xl p-6">
-                    <h3 class="font-semibold text-gray-900 mb-2">{{ $adaptation->scenario }}</h3>
+                    <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{{ $adaptation->scenario }}</h3>
                     <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{{ $adaptation->adaptation_text }}</p>
                 </div>
             @endforeach
