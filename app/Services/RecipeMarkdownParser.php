@@ -88,6 +88,13 @@ class RecipeMarkdownParser
 
         $slug = $data['slug'] ?? Str::slug($data['name'] ?? 'sin-nombre');
 
+        // Asegurar slug único
+        $baseSlug = $slug;
+        $counter = 1;
+        while (Recipe::where('slug', $slug)->exists()) {
+            $slug = $baseSlug . '-' . $counter++;
+        }
+
         $recipe = Recipe::create([
             'name' => $data['name'] ?? 'Sin nombre',
             'slug' => $slug,
