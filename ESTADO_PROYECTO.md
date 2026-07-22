@@ -27,17 +27,11 @@ APP_KEY=base64:dV61Qe4WY/Kgg75MTyNxfmjIErPKq/ubhZ6FqgKZNiY=
 
 ## 🏗️ Arquitectura
 
-### Importador Legacy (`/importar`)
-- **Archivo:** `app/Services/RecipeMarkdownParser.php` (~900 líneas)
-- **Componente:** `pages::recipe-importer` → `resources/views/pages/recipe-importer.blade.php`
-- **Ruta:** `Route::livewire('/importar', 'pages::recipe-importer')`
 - **Características:** Flexible, tolerante, basado en heurísticas (~10 violaciones a RMS v2.0)
 - **Estado:** ✅ Funcional, en producción, pero se recomienda migrar a v2
 
 ### Importador RMS v2.0 (`/importar-v2`)
 - **Archivos:** `app/Services/RmsV2/*` (10 clases)
-- **Componente:** `pages::recipe-importer-v2` → `resources/views/pages/recipe-importer-v2.blade.php`
-- **Ruta:** `Route::livewire('/importar-v2', 'pages::recipe-importer-v2')`
 - **Estado:** ✅ Implementado, probado, funcional
 - **100% determinista:** Sin heurísticas, sin adivinar, sin `str_contains`
 
@@ -112,15 +106,11 @@ Recetas, ingredientes, pasos, variantes, adaptaciones, conceptos, errores, equip
 ### Frontend
 - `resources/views/layouts/app.blade.php` — layout con navegación
 - `resources/views/pages/recipe-detail.blade.php` — detalle de receta (SFC)
-- `resources/views/pages/recipe-importer.blade.php` — importador legacy (SFC)
-- `resources/views/pages/recipe-importer-v2.blade.php` — importador RMS v2.0 (SFC)
-- `resources/views/components/⚡recipe-importer.blade.php` — componente importador legacy
 - `resources/views/components/⚡rms-v2-importer.blade.php` — componente importador v2
 - `resources/views/components/⚡recipe-detail.blade.php` — componente detalle
 
 ### Backend
 - `routes/web.php` — todas las rutas Livewire
-- `app/Services/RecipeMarkdownParser.php` — parser legacy (~900 líneas)
 - `app/Services/RmsV2/*` — nuevo parser v2 (~80 líneas cada clase)
 - `app/Providers/AppServiceProvider.php` — URL dinámica
 - `bootstrap/app.php` — trustProxies
