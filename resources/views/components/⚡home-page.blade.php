@@ -27,9 +27,9 @@ new class extends Component {};
                 </form>
             </div>
             <div class="flex justify-center gap-8 text-sm text-gray-400">
-                <span>{{ Recipe::where('is_published', true)->count() }} recetas</span>
+                <span>{{ \App\Models\Recipe::where('is_published', true)->count() }} recetas</span>
                 <span>·</span>
-                <span>{{ Technique::count() }} técnicas</span>
+                <span>{{ \App\Models\Technique::count() }} técnicas</span>
                 <span>·</span>
                 <span>5 niveles</span>
             </div>
@@ -40,7 +40,7 @@ new class extends Component {};
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
         <h2 class="text-2xl font-bold text-gray-900 mb-8">Categorías</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-            @php $cats = Category::withCount('publishedRecipes')->get(); @endphp
+            @php $cats = \App\Models\Category::withCount('publishedRecipes')->get(); @endphp
             @foreach($cats as $cat)
                 <a href="/recetas?category={{ $cat->slug }}"
                    class="group flex flex-col items-center p-4 bg-gray-50 rounded-2xl hover:bg-orange-50 hover:border-orange-200 border border-transparent transition-all">
@@ -59,7 +59,7 @@ new class extends Component {};
             <a href="/recetas" class="text-sm font-medium text-orange-600 hover:text-orange-700">Ver todas →</a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @php $recent = Recipe::with('categories')->where('is_published', true)->latest()->take(6)->get(); @endphp
+            @php $recent = \App\Models\Recipe::with('categories')->where('is_published', true)->latest()->take(6)->get(); @endphp
             @foreach($recent as $recipe)
                 <a href="/recetas/{{ $recipe->slug }}"
                    class="group block bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-200 hover:shadow-lg hover:shadow-orange-50 transition-all">
