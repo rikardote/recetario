@@ -42,5 +42,8 @@ Route::livewire('/recetas/{recipe:slug}/lista-compras', 'pages::shopping-list-pr
 // Recipe Importer
 Route::livewire('/importar', 'pages::recipe-importer')->name('recipes.import');
 
+// RMS v2.0 Importer
+Route::livewire('/importar-v2', 'pages::recipe-importer-v2')->name('recipes.import-v2');
+
 // Favorites
 Route::livewire('/favoritos', 'pages::favorite-button')->name('favorites');
