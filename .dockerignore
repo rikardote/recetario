@@ -1,0 +1,13 @@
+.git
+.gitignore
+.gitattributes
+node_modules
+vendor
+.env
+database/database.sqlite
+storage/framework/cache
+storage/framework/sessions
+storage/framework/views
+storage/logs
+.DS_Store
+*.md

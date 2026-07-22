@@ -16,8 +16,9 @@ class DatabaseSeeder extends Seeder
             IngredientSeeder::class,
             InstantPotFunctionSeeder::class,
             ConceptSeeder::class,
-            RecipeSeeder::class,
-            BaseRecipesSeeder::class,
+            // RecipeSeeder::class,       // Recetas demo (reemplazadas por las existentes)
+            // BaseRecipesSeeder::class,   // Recetas base duplicadas (reemplazadas)
+            ExistingRecipesSeeder::class,  // Las 9 recetas reales de la base de datos
         ]);
     }
 }
