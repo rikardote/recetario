@@ -46,6 +46,8 @@ class RecipeMarkdownParser
         $this->parseSection('Objetivo', fn($s) => $this->parseObjective($s));
         $this->parseSection('Ingredientes', fn($s) => $this->parseIngredients($s));
         $this->parseSection('Equipo', fn($s) => $this->parseEquipment($s));
+        $this->parseSection('Preparación previa', fn($s) => $this->parsePreparacion($s));
+        $this->parseSection('Preparacion previa', fn($s) => $this->parsePreparacion($s));
         $this->parseSection('Procedimiento', fn($s) => $this->parseProcedure($s));
         $this->parseSection('Resultado esperado', fn($s) => $this->parseResultado($s));
         $this->parseSection('Variantes', fn($s) => $this->parseVariants($s));
@@ -175,9 +177,18 @@ class RecipeMarkdownParser
             }
         }
 
-        // Steps
-        if (!empty($data['steps'])) {
-            foreach ($data['steps'] as $i => $step) {
+        // Steps (prepend preparation as step 0 if present)
+        $allSteps = $data['steps'] ?? [];
+        if (!empty($data['preparation'])) {
+            array_unshift($allSteps, [
+                'action' => "🔪 Preparación previa\n\n" . $data['preparation'],
+                'technical_fundament' => '',
+                'what_to_observe' => null,
+                'common_errors' => null,
+            ]);
+        }
+        if (!empty($allSteps)) {
+            foreach ($allSteps as $i => $step) {
                 RecipeStep::create([
                     'recipe_id' => $recipe->id,
                     'step_number' => $i + 1,
@@ -803,6 +814,11 @@ class RecipeMarkdownParser
     // ═══════════════════════════════════════════════════════════
     // Notas técnicas
     // ═══════════════════════════════════════════════════════════
+
+    private function parsePreparacion(string $block): void
+    {
+        $this->result['preparation'] = $this->stripHeader($block);
+    }
 
     private function parseChefNotes(string $block): void
     {
