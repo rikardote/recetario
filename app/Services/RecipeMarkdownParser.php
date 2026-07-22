@@ -43,20 +43,50 @@ class RecipeMarkdownParser
         $this->sections = $this->splitSections();
 
         $this->parseHeader();
-        $this->parseSection('Objetivo', fn($s) => $this->parseObjective($s));
-        $this->parseSection('Ingredientes', fn($s) => $this->parseIngredients($s));
-        $this->parseSection('Equipo', fn($s) => $this->parseEquipment($s));
-        $this->parseSection('Preparación previa', fn($s) => $this->parsePreparacion($s));
-        $this->parseSection('Preparacion previa', fn($s) => $this->parsePreparacion($s));
-        $this->parseSection('Procedimiento', fn($s) => $this->parseProcedure($s));
-        $this->parseSection('Resultado esperado', fn($s) => $this->parseResultado($s));
-        $this->parseSection('Variantes', fn($s) => $this->parseVariants($s));
-        $this->parseSection('Adaptaciones', fn($s) => $this->parseAdaptations($s));
-        $this->parseSection('Conservación', fn($s) => $this->parseConservacion($s));
-        $this->parseSection('Resumen técnico', fn($s) => $this->parseResumenTecnico($s));
-        $this->parseSection('Conceptos aprendidos', fn($s) => $this->parseConcepts($s));
-        $this->parseSection('Problemas frecuentes', fn($s) => $this->parseProblemas($s));
-        $this->parseSection('Notas técnicas', fn($s) => $this->parseChefNotes($s));
+
+        // Mapeo de nombres de sección (con y sin acentos) a métodos handlers
+        $sectionHandlers = [
+            'objetivo' => 'parseObjective',
+            'ingredientes' => 'parseIngredients',
+            'equipo' => 'parseEquipment',
+            'procedimiento' => 'parseProcedure',
+            'resultado esperado' => 'parseResultado',
+            'variantes' => 'parseVariants',
+            'adaptaciones' => 'parseAdaptations',
+            'conservación' => 'parseConservacion',
+            'conservacion' => 'parseConservacion',
+            'resumen técnico' => 'parseResumenTecnico',
+            'resumen tecnico' => 'parseResumenTecnico',
+            'conceptos aprendidos' => 'parseConcepts',
+            'problemas frecuentes' => 'parseProblemas',
+            'notas técnicas' => 'parseChefNotes',
+            'notas tecnicas' => 'parseChefNotes',
+            'preparación previa' => 'parsePreparacion',
+            'preparacion previa' => 'parsePreparacion',
+            'preparación' => 'parsePreparacion',
+            'preparacion' => 'parsePreparacion',
+        ];
+
+        foreach ($sectionHandlers as $sectionName => $method) {
+            $this->parseSection($sectionName, fn($s) => $this->$method($s));
+        }
+
+        // Capturar secciones no reconocidas (Recetas relacionadas, etc.) como notas extra
+        $handledKeys = array_keys($sectionHandlers);
+        $handledKeys[] = '__header__';
+        foreach ($this->sections as $key => $block) {
+            if (!in_array($key, $handledKeys)) {
+                $sectionTitle = ucfirst($key);
+                $content = $this->stripHeader($block);
+                if (!empty($content)) {
+                    $this->result['chef_notes'] = trim(
+                        ($this->result['chef_notes'] ?? '') .
+                        ($this->result['chef_notes'] ?? false ? "\n\n" : '') .
+                        "📌 {$sectionTitle}\n\n{$content}"
+                    );
+                }
+            }
+        }
 
         return [
             'result' => $this->result,
