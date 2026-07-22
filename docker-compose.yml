@@ -18,6 +18,7 @@ services:
       - DB_DATABASE=recetario
       - DB_USERNAME=recetario
       - DB_PASSWORD=recetario_secret
+      - APP_KEY=base64:dV61Qe4WY/Kgg75MTyNxfmjIErPKq/ubhZ6FqgKZNiY=
       - LOG_CHANNEL=stack
       - LOG_LEVEL=warning
     volumes:
