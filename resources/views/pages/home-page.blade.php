@@ -1,14 +1,32 @@
 <?php
 
 use Livewire\Component;
+use App\Models\Category;
 use App\Models\Recipe;
 use App\Models\Technique;
 
-new class extends Component {};
+new class extends Component
+{
+    public int $totalRecipes = 0;
+    public int $totalTechniques = 0;
+    public $categories = [];
+    public $recentRecipes = [];
+
+    public function mount(): void
+    {
+        $this->totalRecipes = Recipe::where('is_published', true)->count();
+        $this->totalTechniques = Technique::count();
+        $this->categories = Category::withCount('publishedRecipes')->get();
+        $this->recentRecipes = Recipe::with('categories')
+            ->where('is_published', true)
+            ->latest()
+            ->take(6)
+            ->get();
+    }
+};
 ?>
 
 <div>
-    <!-- Hero -->
     <section class="py-20 md:py-32 px-4">
         <div class="max-w-4xl mx-auto text-center">
             <h1 class="text-4xl md:text-6xl font-bold text-gray-900 tracking-tight leading-tight mb-6">
@@ -27,21 +45,19 @@ new class extends Component {};
                 </form>
             </div>
             <div class="flex justify-center gap-8 text-sm text-gray-400">
-                <span>{{ \App\Models\Recipe::where('is_published', true)->count() }} recetas</span>
+                <span>{{ $totalRecipes }} recetas</span>
                 <span>·</span>
-                <span>{{ \App\Models\Technique::count() }} técnicas</span>
+                <span>{{ $totalTechniques }} técnicas</span>
                 <span>·</span>
                 <span>5 niveles</span>
             </div>
         </div>
     </section>
 
-    <!-- Categories -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
         <h2 class="text-2xl font-bold text-gray-900 mb-8">Categorías</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
-            @php $cats = \App\Models\Category::withCount('publishedRecipes')->get(); @endphp
-            @foreach($cats as $cat)
+            @foreach($categories as $cat)
                 <a href="/recetas?category={{ $cat->slug }}"
                    class="group flex flex-col items-center p-4 bg-gray-50 rounded-2xl hover:bg-orange-50 hover:border-orange-200 border border-transparent transition-all">
                     <span class="text-3xl mb-2">{{ $cat->icon }}</span>
@@ -52,20 +68,18 @@ new class extends Component {};
         </div>
     </section>
 
-    <!-- Recent Recipes -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
         <div class="flex justify-between items-center mb-8">
             <h2 class="text-2xl font-bold text-gray-900">Recetas recientes</h2>
             <a href="/recetas" class="text-sm font-medium text-orange-600 hover:text-orange-700">Ver todas →</a>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            @php $recent = \App\Models\Recipe::with('categories')->where('is_published', true)->latest()->take(6)->get(); @endphp
-            @foreach($recent as $recipe)
+            @foreach($recentRecipes as $recipe)
                 <a href="/recetas/{{ $recipe->slug }}"
                    class="group block bg-white border border-gray-100 rounded-2xl p-6 hover:border-orange-200 hover:shadow-lg hover:shadow-orange-50 transition-all">
                     <div class="flex items-start justify-between mb-3">
                         <span class="text-xs font-medium text-orange-600 bg-orange-50 px-2 py-1 rounded-full">
-                            {{ $recipe->category->icon ?? '' }} {{ $recipe->category->name }}
+                            {{ $recipe->category?->icon ?? '' }} {{ $recipe->category?->name }}
                         </span>
                         <span class="text-xs text-gray-400">{{ str_repeat('⭐', $recipe->difficulty) }}</span>
                     </div>
@@ -80,7 +94,6 @@ new class extends Component {};
         </div>
     </section>
 
-    <!-- Learning levels -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
         <h2 class="text-2xl font-bold text-gray-900 mb-8">Ruta de aprendizaje</h2>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4">
@@ -96,7 +109,6 @@ new class extends Component {};
         </div>
     </section>
 
-    <!-- CTA -->
     <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mb-16">
         <div class="bg-gradient-to-br from-orange-50 to-orange-100 rounded-3xl p-8 md:p-12 text-center">
             <h2 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">¿Listo para dominar tu Instant Pot?</h2>
