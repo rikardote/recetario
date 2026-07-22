@@ -13,10 +13,10 @@ new class extends Component
  public function mount(Recipe $recipe)
  {
  $this->recipe = $recipe->load([
- 'categories', 'steps', 'equipment', 'tags',
- 'variants', 'adaptations', 'concepts', 'errors',
- 'recipeIngredients.ingredient', 'images', 'videos',
- 'dependencies', 'derivedRecipes',
+'>categories','>steps','>equipment','>tags',
+'>variants','>adaptations','>concepts','>errors',
+'>recipeIngredients.ingredient','>images','>videos',
+'>dependencies','>derivedRecipes',
  ]);
  }
 
@@ -65,19 +65,19 @@ new class extends Component
 <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
  {{-- Breadcrumb --}}
  <nav class="flex items-center gap-2 text-sm text-gray-400 mb-8">
- <a href="/" class="hover:text-gray-600 ">Inicio</a>
+ <a href="/" class="hover:text-gray-600 dark:text-gray-400">Inicio</a>
  <span>/</span>
- <a href="/recetas" class="hover:text-gray-600 ">Recetas</a>
+ <a href="/recetas" class="hover:text-gray-600 dark:text-gray-400">Recetas</a>
  <span>/</span>
- <a href="/recetas?category={{ $recipe->category->slug }}" class="hover:text-gray-600 ">{{ $recipe->category->name }}</a>
+ <a href="/recetas?category={{ $recipe->category->slug }}" class="hover:text-gray-600 dark:text-gray-400">{{ $recipe->category->name }}</a>
  <span>/</span>
- <span class="text-gray-600 ">{{ $recipe->name }}</span>
+ <span class="text-gray-600 dark:text-gray-400">{{ $recipe->name }}</span>
  </nav>
 
  {{-- Header --}}
  <div class="mb-10">
  <div class="flex flex-wrap items-center gap-3 mb-4">
- <span class="text-xs font-medium {{ $recipe->isDerived() ? 'bg-blue-50 text-blue-700' : 'bg-green-50 text-green-700' }} px-3 py-1 rounded-full">
+ <span class="text-xs font-medium {{ $recipe->isDerived() ?'>bg-blue-50 text-blue-700' :'>bg-green-50 text-green-700' }} px-3 py-1 rounded-full">
  {{ $recipe->recipeTypeIcon() }} {{ $recipe->recipeTypeLabel() }}
  </span>
  <span class="text-xs font-medium text-orange-600 bg-orange-50 px-3 py-1 rounded-full">
@@ -93,8 +93,8 @@ new class extends Component
  <span class="text-sm text-gray-400">{{ str_repeat('⭐', $recipe->difficulty) }}</span>
  <span class="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded-full">{{ $recipe->cost }}</span>
  </div>
- <h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{{ $recipe->name }}</h1>
- <p class="text-lg text-gray-500 max-w-2xl leading-relaxed">{{ $recipe->description }}</p>
+ <h1 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white dark:text-gray-100 mb-4">{{ $recipe->name }}</h1>
+ <p class="text-lg text-gray-500 dark:text-gray-400 max-w-2xl leading-relaxed">{{ $recipe->description }}</p>
 
  <div class="flex flex-wrap gap-6 mt-6 text-sm text-gray-500">
  <div><span class="text-gray-400">⏱ Prep:</span> <span class="font-medium text-gray-700">{{ $recipe->prep_time }} min</span></div>
@@ -123,8 +123,8 @@ new class extends Component
  </button>
  @if($recipe->source_markdown)
  <button wire:click="toggleSource"
- class="inline-flex items-center gap-2 text-gray-400 hover:text-gray-600 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 border border-transparent hover:border-gray-200 transition-colors">
- {{ $showSource ? '📝 Ocultar fuente' : '📝 Ver fuente' }}
+ class="inline-flex items-center gap-2 text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300 px-4 py-2 rounded-xl text-sm font-medium hover:bg-gray-50 border border-transparent hover:border-gray-200 transition-colors">
+ {{ $showSource ?'>📝 Ocultar fuente' :'>📝 Ver fuente' }}
  </button>
  @endif
  </div>
@@ -135,20 +135,20 @@ new class extends Component
  <div class="mb-8 border border-gray-200 rounded-2xl overflow-hidden">
  <div class="bg-gray-50 px-5 py-3 border-b border-gray-200 flex items-center justify-between">
  <h2 class="font-semibold text-gray-700 text-sm">📝 Fuente original (Markdown)</h2>
- <button wire:click="toggleSource" class="text-xs text-gray-400 hover:text-gray-600 ">✕ Cerrar</button>
+ <button wire:click="toggleSource" class="text-xs text-gray-400 dark:text-gray-500 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300">✕ Cerrar</button>
  </div>
- <pre class="px-5 py-4 text-xs font-mono text-gray-600 bg-white overflow-auto max-h-96 leading-relaxed">{{ $recipe->source_markdown }}</pre>
+ <pre class="px-5 py-4 text-xs font-mono text-gray-600 dark:text-gray-400 bg-white overflow-auto max-h-96 leading-relaxed">{{ $recipe->source_markdown }}</pre>
  </div>
  @endif
 
  {{-- Objetivo --}}
- <div class="bg-orange-50 border border-orange-100 rounded-2xl p-6 mb-8">
- <h2 class="text-sm font-semibold text-orange-700 uppercase tracking-wide mb-2">🎯 Objetivo</h2>
- <p class="text-gray-700 leading-relaxed">{{ $recipe->objective }}</p>
+ <div class="dark:bg-orange-900/20 dark:border-orange-800 bg-orange-50 border border-orange-100 rounded-2xl p-6 mb-8">
+ <h2 class="text-sm font-semibold text-orange-700 dark:text-orange-300 uppercase tracking-wide mb-2">🎯 Objetivo</h2>
+ <p class="text-gray-700 dark:text-gray-300 leading-relaxed">{{ $recipe->objective }}</p>
  </div>
 
  {{-- Procedimiento --}}
- <h2 class="text-xl font-bold text-gray-900 mb-6">📋 Procedimiento</h2>
+ <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">📋 Procedimiento</h2>
  <div class="space-y-8 mb-12">
  @foreach($recipe->steps as $step)
  <div class="border border-gray-100 rounded-2xl p-6">
@@ -158,8 +158,8 @@ new class extends Component
  </span>
  <div class="flex-1 space-y-4">
  <div>
- <h3 class="font-semibold text-gray-900 mb-1">Paso {{ $step->step_number }}</h3>
- <p class="text-gray-700 leading-relaxed">{{ $step->action }}</p>
+ <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-1">Paso {{ $step->step_number }}</h3>
+ <p class="text-gray-700 dark:text-gray-300 leading-relaxed">{{ $step->action }}</p>
  </div>
  @if($step->technical_fundament)
  <div class="bg-blue-50 rounded-xl p-4 border border-blue-100">
@@ -186,13 +186,13 @@ new class extends Component
  </div>
 
  {{-- Ingredientes --}}
- <h2 class="text-xl font-bold text-gray-900 mb-6">🧂 Ingredientes</h2>
+ <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">🧂 Ingredientes</h2>
  <div class="space-y-6 mb-12">
  @php $grouped = $recipe->recipeIngredients->groupBy('category'); @endphp
- @foreach(['proteinas' => '🍖 Proteínas', 'verduras' => '🥕 Verduras', 'liquidos' => '💧 Líquidos', 'condimentos' => '🌿 Condimentos', 'terminacion' => '✨ Terminación'] as $cat => $label)
+ @foreach(['proteinas' =>'>🍖 Proteínas','>verduras' =>'>🥕 Verduras','>liquidos' =>'>💧 Líquidos','>condimentos' =>'>🌿 Condimentos','>terminacion' =>'>✨ Terminación'] as $cat => $label)
  @if(isset($grouped[$cat]) && $grouped[$cat]->count())
  <div>
- <h3 class="font-semibold text-gray-900 mb-3">{{ $label }}</h3>
+ <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-3">{{ $label }}</h3>
  <ul class="space-y-2">
  @foreach($grouped[$cat] as $ri)
  <li class="flex items-center gap-2 text-gray-700">
@@ -213,11 +213,11 @@ new class extends Component
 
  {{-- Equipo --}}
  @if($recipe->equipment->count())
- <h2 class="text-xl font-bold text-gray-900 mb-6">🔧 Equipo necesario</h2>
+ <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">🔧 Equipo necesario</h2>
  <div class="space-y-4 mb-12">
  @foreach($recipe->equipment as $eq)
  <div class="border border-gray-100 rounded-2xl p-6">
- <h3 class="font-semibold text-gray-900 mb-2">{{ $eq->name }}</h3>
+ <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{{ $eq->name }}</h3>
  <p class="text-sm text-gray-500 mb-3">{{ $eq->description }}</p>
  @if($eq->when_to_use)
  <div class="text-sm text-green-700 bg-green-50 rounded-lg p-3 mb-2"><strong>✅ Usar cuando:</strong> {{ $eq->when_to_use }}</div>
@@ -232,11 +232,11 @@ new class extends Component
 
  {{-- Variantes --}}
  @if($recipe->variants->count())
- <h2 class="text-xl font-bold text-gray-900 mb-6">🔄 Variantes</h2>
+ <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">🔄 Variantes</h2>
  <div class="space-y-4 mb-12">
  @foreach($recipe->variants as $variant)
  <div class="border border-gray-100 rounded-2xl p-6">
- <h3 class="font-semibold text-gray-900 mb-2">{{ $variant->name }}</h3>
+ <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{{ $variant->name }}</h3>
  @if($variant->description)<p class="text-sm text-gray-500 mb-3">{{ $variant->description }}</p>@endif
  @if($variant->ingredients_changes)<div class="bg-yellow-50 rounded-lg p-3 mb-2 text-sm"><strong>🧂 Ingredientes:</strong> {{ $variant->ingredients_changes }}</div>@endif
  @if($variant->procedure_changes)<div class="bg-yellow-50 rounded-lg p-3 text-sm"><strong>📋 Procedimiento:</strong> {{ $variant->procedure_changes }}</div>@endif
@@ -247,12 +247,12 @@ new class extends Component
 
  {{-- Adaptaciones --}}
  @if($recipe->adaptations->count())
- <h2 class="text-xl font-bold text-gray-900 mb-6">🔀 Adaptaciones</h2>
+ <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">🔀 Adaptaciones</h2>
  <div class="space-y-4 mb-12">
  @foreach($recipe->adaptations as $adaptation)
  <div class="border border-gray-100 rounded-2xl p-6">
- <h3 class="font-semibold text-gray-900 mb-2">{{ $adaptation->scenario }}</h3>
- <p class="text-sm text-gray-600 leading-relaxed">{{ $adaptation->adaptation_text }}</p>
+ <h3 class="font-semibold text-gray-900 dark:text-gray-100 mb-2">{{ $adaptation->scenario }}</h3>
+ <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">{{ $adaptation->adaptation_text }}</p>
  </div>
  @endforeach
  </div>
@@ -260,7 +260,7 @@ new class extends Component
 
  {{-- Conceptos aprendidos --}}
  @if($recipe->concepts->count())
- <h2 class="text-xl font-bold text-gray-900 mb-6">📚 Conceptos aprendidos</h2>
+ <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">📚 Conceptos aprendidos</h2>
  <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-12">
  @foreach($recipe->concepts as $concept)
  <div class="flex items-center gap-3 bg-green-50 border border-green-100 rounded-xl p-4">
@@ -273,25 +273,25 @@ new class extends Component
 
  {{-- Solución de problemas --}}
  @if($recipe->errors->count())
- <h2 class="text-xl font-bold text-gray-900 mb-6">⚠️ Solución de problemas</h2>
+ <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">⚠️ Solución de problemas</h2>
  <div class="space-y-4 mb-12">
  @foreach($recipe->errors as $error)
  <div class="border border-red-100 rounded-2xl p-6 bg-red-50/50">
  <h3 class="font-semibold text-red-800 mb-3">⚠️ {{ $error->problem }}</h3>
- @if($error->possible_cause)<div class="text-sm text-gray-600 mb-2"><strong class="text-red-700">Posible causa:</strong> {{ $error->possible_cause }}</div>@endif
- <div class="text-sm text-gray-600 "><strong class="text-green-700">✅ Solución:</strong> {{ $error->solution }}</div>
+ @if($error->possible_cause)<div class="text-sm text-gray-600 dark:text-gray-400 mb-2"><strong class="text-red-700">Posible causa:</strong> {{ $error->possible_cause }}</div>@endif
+ <div class="text-sm text-gray-600 dark:text-gray-400"><strong class="text-green-700">✅ Solución:</strong> {{ $error->solution }}</div>
  </div>
  @endforeach
  </div>
  @endif
 
  {{-- Resultado esperado --}}
- <h2 class="text-xl font-bold text-gray-900 mb-6">✅ Resultado esperado</h2>
+ <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">✅ Resultado esperado</h2>
  <div class="space-y-4 mb-12">
- @foreach(['result_texture' => 'Textura','result_color' => 'Color','result_consistency' => 'Consistencia','result_flavor' => 'Sabor esperado'] as $field => $label)
+ @foreach(['result_texture' =>'>Textura','result_color' =>'>Color','result_consistency' =>'>Consistencia','result_flavor' =>'>Sabor esperado'] as $field => $label)
  @if($recipe->$field)
  <div class="border border-gray-100 rounded-2xl p-6">
- <h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">{{ $label }}</h3>
+ <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">{{ $label }}</h3>
  <p class="text-gray-700">{{ $recipe->$field }}</p>
  </div>
  @endif
@@ -299,25 +299,25 @@ new class extends Component
  </div>
 
  {{-- Resumen técnico --}}
- <h2 class="text-xl font-bold text-gray-900 mb-6">⚡ Resumen Técnico</h2>
+ <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">⚡ Resumen Técnico</h2>
  <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-12">
  @if($recipe->pressure_cook_time)
- <div class="bg-gray-50 rounded-2xl p-6"><h3 class="text-sm font-semibold text-gray-500 uppercase mb-1">Pressure Cook</h3><p class="text-2xl font-bold text-gray-900">{{ $recipe->pressure_cook_time }} <span class="text-sm font-normal text-gray-400">min</span></p></div>
+ <div class="bg-gray-50 rounded-2xl p-6"><h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Pressure Cook</h3><p class="text-2xl font-bold text-gray-900">{{ $recipe->pressure_cook_time }} <span class="text-sm font-normal text-gray-400">min</span></p></div>
  @endif
  @if($recipe->pressure_release)
- <div class="bg-gray-50 rounded-2xl p-6"><h3 class="text-sm font-semibold text-gray-500 uppercase mb-1">Liberación</h3><p class="text-xl font-bold text-gray-900 capitalize">{{ $recipe->pressure_release }}@if($recipe->pressure_release_time) <span class="text-sm font-normal text-gray-400">· {{ $recipe->pressure_release_time }} min</span>@endif</p></div>
+ <div class="bg-gray-50 rounded-2xl p-6"><h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Liberación</h3><p class="text-xl font-bold text-gray-900 dark:text-white capitalize">{{ $recipe->pressure_release }}@if($recipe->pressure_release_time) <span class="text-sm font-normal text-gray-400">· {{ $recipe->pressure_release_time }} min</span>@endif</p></div>
  @endif
  @if($recipe->saute_time)
- <div class="bg-gray-50 rounded-2xl p-6"><h3 class="text-sm font-semibold text-gray-500 uppercase mb-1">Sauté</h3><p class="text-2xl font-bold text-gray-900">{{ $recipe->saute_time }} <span class="text-sm font-normal text-gray-400">min</span></p></div>
+ <div class="bg-gray-50 rounded-2xl p-6"><h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">Sauté</h3><p class="text-2xl font-bold text-gray-900">{{ $recipe->saute_time }} <span class="text-sm font-normal text-gray-400">min</span></p></div>
  @endif
  </div>
 
  {{-- Conservación --}}
- <h2 class="text-xl font-bold text-gray-900 mb-6">❄️ Conservación</h2>
+ <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-6">❄️ Conservación</h2>
  <div class="space-y-4 mb-12">
- @foreach(['storage_refrigeration' => '🧊 Refrigeración','storage_freezing' => '❄️ Congelación','storage_reheating' => '🔥 Recalentado'] as $field => $label)
+ @foreach(['storage_refrigeration' =>'>🧊 Refrigeración','storage_freezing' =>'>❄️ Congelación','storage_reheating' =>'>🔥 Recalentado'] as $field => $label)
  @if($recipe->$field)
- <div class="border border-gray-100 rounded-2xl p-6"><h3 class="text-sm font-semibold text-gray-500 uppercase mb-2">{{ $label }}</h3><p class="text-gray-700">{{ $recipe->$field }}</p></div>
+ <div class="border border-gray-100 rounded-2xl p-6"><h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">{{ $label }}</h3><p class="text-gray-700">{{ $recipe->$field }}</p></div>
  @endif
  @endforeach
  </div>
@@ -325,7 +325,7 @@ new class extends Component
  {{-- Relaciones --}}
  @if($recipe->isBase() && $recipe->derivedRecipes->count())
  <div class="mt-12 border-t pt-8">
- <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">🍽️ Utilizada en</h3>
+ <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">🍽️ Utilizada en</h3>
  <div class="grid grid-cols-2 sm:grid-cols-3 gap-2">
  @foreach($recipe->derivedRecipes as $derived)
  <a href="/recetas/{{ $derived->slug }}"
@@ -340,7 +340,7 @@ new class extends Component
 
  @if($recipe->isDerived() && $recipe->dependencies->count())
  <div class="mt-12 border-t pt-8">
- <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-4">🧱 Basada en</h3>
+ <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-4">🧱 Basada en</h3>
  <div class="space-y-2">
  @foreach($recipe->dependencies as $dep)
  <a href="/recetas/{{ $dep->slug }}"
@@ -361,8 +361,8 @@ new class extends Component
  {{-- Notas del chef --}}
  @if($recipe->chef_notes)
  <div class="mt-12 border-t pt-8">
- <h3 class="text-sm font-semibold text-gray-500 uppercase tracking-wide mb-3">👨‍🍳 Notas del chef</h3>
- <div class="bg-gray-50 rounded-2xl p-6 text-gray-700 leading-relaxed">{{ $recipe->chef_notes }}</div>
+ <h3 class="text-sm font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-3">👨‍🍳 Notas del chef</h3>
+ <div class="dark:bg-gray-800 bg-gray-50 dark:bg-gray-800 rounded-2xl p-6 text-gray-700 dark:text-gray-300 dark:text-gray-300 leading-relaxed">{{ $recipe->chef_notes }}</div>
  </div>
  @endif
 
@@ -375,7 +375,7 @@ new class extends Component
  <div class="relative bg-white rounded-2xl shadow-2xl max-w-md w-full p-6 z-10">
  <div class="text-center">
  <div class="text-5xl mb-4">⚠️</div>
- <h3 class="text-xl font-bold text-gray-900 mb-2">¿Eliminar receta?</h3>
+ <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">¿Eliminar receta?</h3>
  <p class="text-gray-500 mb-2">
  Estás a punto de eliminar <strong>«{{ $recipe->name }}»</strong>
  </p>
