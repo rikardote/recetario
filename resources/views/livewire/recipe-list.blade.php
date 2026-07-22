@@ -11,7 +11,7 @@
 
     {{-- Mobile search (always visible) --}}
     <div class="lg:hidden mb-4">
-        <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar recetas..."
+        <input type="text" wire:model.live="search" placeholder="Buscar recetas..."
             class="w-full px-4 py-3 border border-gray-200 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none text-sm">
     </div>
 
@@ -59,7 +59,7 @@
             <div class="space-y-6">
                 {{-- Desktop search --}}
                 <div class="hidden lg:block">
-                    <input type="text" wire:model.live.debounce.300ms="search" placeholder="Buscar..."
+                    <input type="text" wire:model.live="search" placeholder="Buscar..."
                         class="w-full px-4 py-2 border border-gray-200 rounded-xl focus:border-orange-400 focus:ring-2 focus:ring-orange-100 outline-none text-sm">
                 </div>
                 <div>
