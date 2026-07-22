@@ -34,9 +34,6 @@
     <style>
         html { transition: background-color .3s, color .3s; }
         html.dark { color-scheme: dark; }
-        /* TEST: si el toggle funciona, todas las cards se vuelven rojas */
-        html.dark .bg-white,
-        html.dark [class*="bg-white"] { background-color: #ff0000 !important; }
     </style>
 </head>
 <body class="bg-white text-gray-900 antialiased dark:bg-gray-950 dark:text-gray-100">
