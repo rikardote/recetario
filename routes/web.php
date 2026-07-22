@@ -44,3 +44,20 @@ Route::livewire('/importar', 'pages::recipe-importer-v2')->name('recipes.import'
 
 // Favorites
 Route::livewire('/favoritos', 'pages::favorite-button')->name('favorites');
+
+// DEBUG: quitar después
+Route::get('/debug', function() {
+    try {
+        $r = \App\Models\Recipe::with('categories', 'steps', 'tags')->first();
+        if (!$r) return 'No recipes in DB';
+        return [
+            'name' => $r->name,
+            'slug' => $r->slug,
+            'categories' => $r->categories->pluck('name'),
+            'steps' => $r->steps->count(),
+            'category_accessor' => $r->category?->name,
+        ];
+    } catch(\Exception $e) {
+        return $e->getMessage() . "\n\n" . $e->getTraceAsString();
+    }
+});
