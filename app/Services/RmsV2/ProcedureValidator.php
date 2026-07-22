@@ -29,7 +29,8 @@ class ProcedureValidator
         $errors = [];
         $steps = [];
 
-        // Split by ## Paso N
+        // Prepend newline to handle content starting with ## Paso N
+        $content = "\n" . $content;
         $parts = preg_split('/\n(?=##\s+Paso\s+\d)/u', $content);
         // Skip text before first step
         array_shift($parts);

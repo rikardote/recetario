@@ -43,7 +43,8 @@ class SectionExtractor
         // Remove YAML frontmatter if still present
         $body = preg_replace('/^---\s*\n.*?\n---\s*\n/s', '', $body);
 
-        // Split by H1 (# heading)
+        // Prepend newline for splitting
+        $body = "\n" . $body;
         $parts = preg_split('/\n(?=#\s)/', $body);
         $firstKey = null;
 

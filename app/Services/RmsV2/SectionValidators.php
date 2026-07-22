@@ -27,6 +27,7 @@ class SectionValidators
         $errors = [];
         $items = [];
 
+        $content = "\n" . $content;
         $parts = preg_split('/\n(?=##\s)/u', $content);
         array_shift($parts); // Skip text before first ##
 

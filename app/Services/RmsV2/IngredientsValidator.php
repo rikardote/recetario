@@ -23,7 +23,7 @@ class IngredientsValidator
         $errors = [];
         $ingredients = [];
 
-        // Split by H2 sub-headings
+        $content = "\n" . $content;
         $parts = preg_split('/\n(?=##\s)/u', $content);
 
         foreach ($parts as $part) {
