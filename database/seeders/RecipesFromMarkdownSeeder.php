@@ -18,6 +18,11 @@ class RecipesFromMarkdownSeeder extends Seeder
 {
     public function run(): void
     {
+        // Skip if recipes already exist
+        if (\App\Models\Recipe::count() > 0) {
+            $this->command?->info('Recipes already seeded. Skipping.');
+            return;
+        }
         $dir = base_path('recipes');
         if (!is_dir($dir)) {
             $this->command?->warn("Directory 'recipes/' not found. Run 'php artisan rms:export' first.");

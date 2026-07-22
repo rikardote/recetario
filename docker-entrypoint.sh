@@ -47,7 +47,7 @@ php artisan config:cache
 
 # Ejecutar migraciones y seeders
 php artisan migrate --force
-php artisan db:seed --force --class=ExistingRecipesSeeder
+php artisan db:seed --force
 
 # Cachear rutas y vistas
 php artisan route:cache 2>/dev/null || true
